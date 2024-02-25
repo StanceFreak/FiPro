@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Grafana Mobile"
+rootProject.name = "Montor Kobong"
 include(":app")
  
