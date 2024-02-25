@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/light_grey</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="RoundedCornerFAB" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <style name="TabTextUnselected" parent="@style/TextAppearance.Design.Tab">
+        <item name="fontFamily">@font/os_regular</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="TabTextSelected" parent="@style/TextAppearance.Design.Tab">
+        <item name="fontFamily">@font/os_bold</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+</resources>
