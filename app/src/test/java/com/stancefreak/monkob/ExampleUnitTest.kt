@@ -1,4 +1,4 @@
-package com.stancefreak.grafanamobile
+package com.stancefreak.monkob
 
 import org.junit.Test
 
