@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingVertical="5dp"
+    android:paddingHorizontal="10dp">
+
+    <TextView
+        android:id="@+id/tv_type_chart_performance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Disk I/O"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/cg_bold"
+        android:layout_marginBottom="10dp"/>
+
+    <Spinner
+        android:id="@+id/sp_type_chart_performance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        android:background="@drawable/bg_spinner_rounded_white"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        android:layout_marginBottom="10dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        android:popupBackground="@color/grey"
+        app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lc_perform_latency_chart"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:background="@color/white_2"
+        android:elevation="10dp"/>
+
+</LinearLayout>
