@@ -38,7 +38,7 @@ class MonitoringPerformanceAdapter(private val context: Context, private val spA
                 spAdapter.setData(typeList[bindingAdapterPosition].lastRetrieve)
                 spTypeChartPerformance.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                        Toast.makeText(context, "Displaying data ${typeList[position].lastRetrieve[position].label}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Displaying data ${typeList[bindingAdapterPosition].lastRetrieve[position].label}", Toast.LENGTH_LONG).show()
                     }
 
                     override fun onNothingSelected(p0: AdapterView<*>?) {
