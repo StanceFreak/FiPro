@@ -24,7 +24,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.stancefreak.monkob.R
 import com.stancefreak.monkob.databinding.ItemListPerformanceBinding
-import com.stancefreak.monkob.model.response.ChartType
+import com.stancefreak.monkob.remote.model.response.ChartType
 
 class MonitoringPerformanceAdapter(private val context: Context, private val spAdapter: TypeSpinnerAdapter): RecyclerView.Adapter<MonitoringPerformanceAdapter.RecyclerViewHolder>() {
 

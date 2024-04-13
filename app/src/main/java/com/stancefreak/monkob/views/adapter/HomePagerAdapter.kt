@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.stancefreak.monkob.views.monitoring.MonitoringPerformanceFragment
-import com.stancefreak.monkob.views.monitoring.MonitoringPhysicalFragment
+import com.stancefreak.monkob.views.monitoring.performance.MonitoringPerformanceFragment
+import com.stancefreak.monkob.views.monitoring.physical.MonitoringPhysicalFragment
 
 class HomePagerAdapter(
     fm: FragmentManager,

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.stancefreak.monkob.R
-import com.stancefreak.monkob.model.response.LastRetrieve
+import com.stancefreak.monkob.remote.model.response.LastRetrieve
 
 class TypeSpinnerAdapter(
     private val context: Context
