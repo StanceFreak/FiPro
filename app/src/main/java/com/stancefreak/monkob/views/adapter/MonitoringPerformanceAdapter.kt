@@ -24,7 +24,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.stancefreak.monkob.R
 import com.stancefreak.monkob.databinding.ItemListPerformanceBinding
-import com.stancefreak.monkob.model.response.ChartType
+import com.stancefreak.monkob.remote.model.response.ChartType
 
 class MonitoringPerformanceAdapter(private val context: Context, private val spAdapter: TypeSpinnerAdapter): RecyclerView.Adapter<MonitoringPerformanceAdapter.RecyclerViewHolder>() {
 
@@ -38,7 +38,7 @@ class MonitoringPerformanceAdapter(private val context: Context, private val spA
                 spAdapter.setData(typeList[bindingAdapterPosition].lastRetrieve)
                 spTypeChartPerformance.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                        Toast.makeText(context, "Displaying data ${typeList[position].lastRetrieve[position].label}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Displaying data ${typeList[bindingAdapterPosition].lastRetrieve[position].label}", Toast.LENGTH_LONG).show()
                     }
 
                     override fun onNothingSelected(p0: AdapterView<*>?) {
