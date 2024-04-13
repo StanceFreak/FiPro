@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/grey"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_interface_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/os_regular"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:text="lo: 77.9KiB/s (250KiB total)"
+        android:gravity="center_vertical"
+        app:drawableStartCompat="@drawable/ic_net_interface"
+        android:drawablePadding="5dp"/>
+
+    <TextView
+        android:id="@+id/tv_interface_transmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/os_regular"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:layout_marginStart="30dp"
+        android:text="Transmit: 77.9KiB/s (250KiB total)"
+        android:gravity="center_vertical"
+        app:drawableStartCompat="@drawable/ic_transmit"
+        android:drawablePadding="5dp"/>
+
+    <TextView
+        android:id="@+id/tv_interface_receive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/os_regular"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:layout_marginStart="30dp"
+        android:text="Receive: 77.9KiB/s (250KiB total)"
+        android:gravity="center_vertical"
+        app:drawableStartCompat="@drawable/ic_receive"
+        android:drawablePadding="5dp"/>
+
+</LinearLayout>
