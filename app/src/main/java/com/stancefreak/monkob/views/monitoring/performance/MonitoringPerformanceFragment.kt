@@ -1,4 +1,4 @@
-package com.stancefreak.monkob.views.monitoring
+package com.stancefreak.monkob.views.monitoring.performance
 
 import android.os.Build
 import android.os.Bundle
@@ -9,12 +9,13 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stancefreak.monkob.databinding.FragmentMonitoringPerformanceBinding
-import com.stancefreak.monkob.model.response.ChartType
-import com.stancefreak.monkob.model.response.LastRetrieve
+import com.stancefreak.monkob.remote.model.response.ChartType
+import com.stancefreak.monkob.remote.model.response.LastRetrieve
 import com.stancefreak.monkob.views.adapter.MonitoringPerformanceAdapter
 import com.stancefreak.monkob.views.adapter.TypeSpinnerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MonitoringPerformanceFragment : Fragment() {
 
     private lateinit var binding: FragmentMonitoringPerformanceBinding
@@ -45,9 +46,9 @@ class MonitoringPerformanceFragment : Fragment() {
             LastRetrieve(4, "Last 24 Hour", "24h"),
         )
         val typeList = arrayListOf(
-            ChartType(0, "Disk I/O", lrList),
-            ChartType(1, "Network I/O", lrList),
-            ChartType(2, "CPU Utilization", lrList)
+            ChartType(0, "Cpu usage (%)", lrList),
+            ChartType(1, "Memory usage (%)", lrList),
+            ChartType(2, "Network latency (ms)", lrList)
         )
         spAdapter = TypeSpinnerAdapter(requireContext())
         monitoringPerformanceAdapter = MonitoringPerformanceAdapter(requireContext(), spAdapter)

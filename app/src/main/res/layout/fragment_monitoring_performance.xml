@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
+    android:background="@color/light_grey"
     android:padding="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".views.monitoring.MonitoringPerformanceFragment">
+    tools:context=".views.monitoring.performance.MonitoringPerformanceFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_perform_chart"
