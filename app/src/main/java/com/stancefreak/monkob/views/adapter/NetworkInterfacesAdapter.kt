@@ -28,8 +28,8 @@ class NetworkInterfacesAdapter: RecyclerView.Adapter<NetworkInterfacesAdapter.Re
                     }
                 }
                 tvInterfaceName.text = "${data.device}: ${totalBandwidth}KiB/s (${totalPackets}KiB total)"
-                tvInterfaceTransmit.text = "Transmit: ${data.utils[1].direction}: ${data.utils[1].value}KiB/s (${data.utils[1].packets}KiB total)"
-                tvInterfaceReceive.text = "Transmit: ${data.utils[0].direction}: ${data.utils[0].value}KiB/s (${data.utils[0].packets}KiB total)"
+                tvInterfaceTransmit.text = "Transmit: ${data.utils[1].value}KiB/s (${data.utils[1].packets}KiB total)"
+                tvInterfaceReceive.text = "Transmit: ${data.utils[0].value}KiB/s (${data.utils[0].packets}KiB total)"
             }
         }
     }
