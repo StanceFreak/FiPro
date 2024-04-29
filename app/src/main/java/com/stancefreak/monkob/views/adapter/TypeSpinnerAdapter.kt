@@ -19,22 +19,22 @@ class TypeSpinnerAdapter(
     }
 
     override fun getItem(position: Int): Any {
-        return this.typeList[position].label
+        return this.typeList[position].query
 
     }
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
-    override fun getView(i: Int, convertView: View?, viewGroup: ViewGroup?): View? {
+    override fun getView(i: Int, convertView: View?, viewGroup: ViewGroup?): View {
         var cv = convertView
         if (cv == null) {
             val inflater = this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             cv = inflater.inflate(R.layout.item_list_spinner, viewGroup, false)
         }
-        val spItem = cv?.findViewById<TextView>(R.id.sp_item_label)
+        val spItem = cv!!.findViewById<TextView>(R.id.sp_item_label)
 
-        spItem?.text = this.typeList[i].label
+        spItem.text = this.typeList[i].label
 
         return cv
     }
