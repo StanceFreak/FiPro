@@ -6,9 +6,8 @@ import com.stancefreak.monkob.remote.model.response.ServerStatusChange
 import com.stancefreak.monkob.remote.model.response.ServerUptime
 import com.stancefreak.monkob.remote.model.request.StatusChangeRequest
 import com.stancefreak.monkob.remote.model.response.ServerCpuUsage
-import com.stancefreak.monkob.remote.model.response.ServerCpuUsageRecord
-import com.stancefreak.monkob.remote.model.response.ServerDiskUtil
-import com.stancefreak.monkob.remote.model.response.ServerNetworkUtil
+import com.stancefreak.monkob.remote.model.response.ServerRecord
+import com.stancefreak.monkob.remote.model.response.ServerPerformanceUtil
 import com.stancefreak.monkob.remote.model.response.ServerUtilTotal
 import retrofit2.Response
 
@@ -27,15 +26,23 @@ class ApiHelperImpl(
         return service.getServerAvgMemory()
     }
 
-    override suspend fun getServerCpuUsageRecord(): Response<BaseResponse<ArrayList<ServerCpuUsageRecord>>> {
-        return service.getServerCpuUsageRecord()
+    override suspend fun getServerCpuUsageRecord(interval: String): Response<BaseResponse<ArrayList<ServerRecord>>> {
+        return service.getServerCpuUsageRecord(interval)
+    }
+
+    override suspend fun getServerMemoryUsageRecord(interval: String): Response<BaseResponse<ArrayList<ServerRecord>>> {
+        return service.getServerMemoryUsageRecord(interval)
+    }
+
+    override suspend fun getServerNetLatencyRecord(interval: String): Response<BaseResponse<ArrayList<ServerRecord>>> {
+        return service.getServerNetLatencyRecord(interval)
     }
 
     override suspend fun getServerCpuUsage(): Response<BaseResponse<ServerCpuUsage>> {
         return service.getServerCpuUsage()
     }
 
-    override suspend fun getServerNetworkUtil(): Response<BaseResponse<ArrayList<ServerNetworkUtil>>> {
+    override suspend fun getServerNetworkUtil(): Response<BaseResponse<ArrayList<ServerPerformanceUtil>>> {
         return service.getServerNetworkUtil()
     }
 
@@ -43,7 +50,7 @@ class ApiHelperImpl(
         return service.getServerNetworkUtilTotal()
     }
 
-    override suspend fun getServerDiskUtil(): Response<BaseResponse<ArrayList<ServerDiskUtil>>> {
+    override suspend fun getServerDiskUtil(): Response<BaseResponse<ArrayList<ServerPerformanceUtil>>> {
         return service.getServerDiskUtil()
     }
 

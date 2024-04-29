@@ -6,14 +6,14 @@ import com.stancefreak.monkob.remote.model.response.ServerStatusChange
 import com.stancefreak.monkob.remote.model.response.ServerUptime
 import com.stancefreak.monkob.remote.model.request.StatusChangeRequest
 import com.stancefreak.monkob.remote.model.response.ServerCpuUsage
-import com.stancefreak.monkob.remote.model.response.ServerCpuUsageRecord
-import com.stancefreak.monkob.remote.model.response.ServerDiskUtil
-import com.stancefreak.monkob.remote.model.response.ServerNetworkUtil
+import com.stancefreak.monkob.remote.model.response.ServerRecord
+import com.stancefreak.monkob.remote.model.response.ServerPerformanceUtil
 import com.stancefreak.monkob.remote.model.response.ServerUtilTotal
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -30,9 +30,20 @@ interface ApiService {
     suspend fun getServerAvgMemory(
     ): Response<BaseResponse<ServerAvgMemory>>
 
-    @GET("cpu-util/record")
+    @GET("cpu-util/record?")
     suspend fun getServerCpuUsageRecord(
-    ): Response<BaseResponse<ArrayList<ServerCpuUsageRecord>>>
+        @Query("interval") interval: String
+    ): Response<BaseResponse<ArrayList<ServerRecord>>>
+
+    @GET("memory-util/record?")
+    suspend fun getServerMemoryUsageRecord(
+        @Query("interval") interval: String
+    ): Response<BaseResponse<ArrayList<ServerRecord>>>
+
+    @GET("net-latency/record?")
+    suspend fun getServerNetLatencyRecord(
+        @Query("interval") interval: String
+    ): Response<BaseResponse<ArrayList<ServerRecord>>>
 
     @GET("cpu-util")
     suspend fun getServerCpuUsage(
@@ -40,7 +51,7 @@ interface ApiService {
 
     @GET("network-util")
     suspend fun getServerNetworkUtil(
-    ): Response<BaseResponse<ArrayList<ServerNetworkUtil>>>
+    ): Response<BaseResponse<ArrayList<ServerPerformanceUtil>>>
 
     @GET("network-util/total")
     suspend fun getServerNetworkUtilTotal(
@@ -48,7 +59,7 @@ interface ApiService {
 
     @GET("disk-util")
     suspend fun getServerDiskUtil(
-    ): Response<BaseResponse<ArrayList<ServerDiskUtil>>>
+    ): Response<BaseResponse<ArrayList<ServerPerformanceUtil>>>
 
     @GET("disk-util/total")
     suspend fun getServerDiskUtilTotal(
