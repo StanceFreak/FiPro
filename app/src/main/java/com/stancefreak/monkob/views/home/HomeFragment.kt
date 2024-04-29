@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,7 +40,13 @@ class HomeFragment : Fragment() {
                 adapter = pagerAdapter
                 isUserInputEnabled = false
             }
-            val listTab = arrayOf("Server Condition", "Server Performance")
+//            srHomeRefresh.setOnRefreshListener {
+//                onRetrieveData.getRefreshState(srHomeRefresh.isRefreshing)
+//                viewModel.getServerUptime()
+//                srHomeRefresh.isRefreshing = false
+//            }
+
+            val listTab = arrayOf("Server Condition", "Server Activity")
             Log.d("tes size", listTab.size.toString())
             TabLayoutMediator(tlHomeContainer, vpHomeContainer) { tab, pos ->
                 tab.text = listTab[pos]
@@ -58,6 +65,5 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
 
 }
