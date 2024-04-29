@@ -6,13 +6,11 @@ import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
 
 @Parcelize
-data class ServerDiskUtil(
+data class ServerPerformanceUtil(
+    @SerializedName("name")
+    val name: String = "",
     @SerializedName("time")
     val time: String = "",
-    @SerializedName("device")
-    val device: String = "",
-    @SerializedName("direction")
-    val direction: String = "",
-    @SerializedName("value")
-    val value: Double = 0.0
+    @SerializedName("utils")
+    val utils: List<Util> = listOf()
 ) : Parcelable

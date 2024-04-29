@@ -1,15 +1,13 @@
-package com.stancefreak.monkob.views.monitoring.physical
+package com.stancefreak.monkob.views.monitoring
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stancefreak.monkob.remote.model.response.HomePerformanceResponse
 import com.stancefreak.monkob.remote.model.response.HomePhysicalResponse
 import com.stancefreak.monkob.remote.model.response.ServerAvgMemory
 import com.stancefreak.monkob.remote.model.response.ServerCpuUsage
-import com.stancefreak.monkob.remote.model.response.ServerDiskUtil
-import com.stancefreak.monkob.remote.model.response.ServerNetworkUtil
-import com.stancefreak.monkob.remote.model.response.ServerUtilTotal
 import com.stancefreak.monkob.remote.repository.AppRepository
 import com.stancefreak.monkob.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,22 +22,17 @@ class MonitoringPhysicalViewModel @Inject constructor(
 
     private val serverAvgMemory = MutableLiveData<SingleLiveEvent<ServerAvgMemory?>>()
     private val serverCpuUsage = MutableLiveData<SingleLiveEvent<ServerCpuUsage?>>()
-    private val serverNetworkUtil = MutableLiveData<SingleLiveEvent<ArrayList<ServerNetworkUtil?>>>()
-    private val serverNetworkUtilTotal = MutableLiveData<SingleLiveEvent<ArrayList<ServerUtilTotal?>>>()
-    private val serverDiskUtil = MutableLiveData<SingleLiveEvent<ArrayList<ServerDiskUtil?>>>()
-    private val serverDiskUtilTotal = MutableLiveData<SingleLiveEvent<ArrayList<ServerUtilTotal?>>>()
-    private val serverUtilData = MutableLiveData<SingleLiveEvent<ArrayList<HomePhysicalResponse>?>>()
+    private val serverPhysicalUtilData = MutableLiveData<SingleLiveEvent<ArrayList<HomePhysicalResponse>?>>()
+    private val serverPerformanceUtilData = MutableLiveData<SingleLiveEvent<ArrayList<HomePerformanceResponse>?>>()
     private val apiLoading = MutableLiveData<SingleLiveEvent<Boolean>>()
     private val apiError = MutableLiveData<SingleLiveEvent<Pair<Boolean, String?>>>()
     private val physicalData = ArrayList<HomePhysicalResponse>()
+    private val performanceData = ArrayList<HomePerformanceResponse>()
 
     fun observeServerAvgMemory(): LiveData<SingleLiveEvent<ServerAvgMemory?>> = serverAvgMemory
     fun observeServerCpuUsage(): LiveData<SingleLiveEvent<ServerCpuUsage?>> = serverCpuUsage
-    fun observeServerUtil(): LiveData<SingleLiveEvent<ArrayList<HomePhysicalResponse>?>> = serverUtilData
-    fun observeServerNetworkUtil(): LiveData<SingleLiveEvent<ArrayList<ServerNetworkUtil?>>> = serverNetworkUtil
-    fun observeServerNetworkUtilTotal(): LiveData<SingleLiveEvent<ArrayList<ServerUtilTotal?>>> = serverNetworkUtilTotal
-    fun observeServerDiskUtil(): LiveData<SingleLiveEvent<ArrayList<ServerDiskUtil?>>> = serverDiskUtil
-    fun observeServerDiskUtilTotal(): LiveData<SingleLiveEvent<ArrayList<ServerUtilTotal?>>> = serverDiskUtilTotal
+    fun observePhysicalServerUtil(): LiveData<SingleLiveEvent<ArrayList<HomePhysicalResponse>?>> = serverPhysicalUtilData
+    fun observePerformanceServerUtil(): LiveData<SingleLiveEvent<ArrayList<HomePerformanceResponse>?>> = serverPerformanceUtilData
     fun observeApiLoading(): LiveData<SingleLiveEvent<Boolean>> = apiLoading
     fun observeApiError(): LiveData<SingleLiveEvent<Pair<Boolean, String?>>> = apiError
 
@@ -95,11 +88,10 @@ class MonitoringPhysicalViewModel @Inject constructor(
                         physicalData.add(HomePhysicalResponse(1, null, null, netUtilTotal.body()?.data))
                         physicalData.add(HomePhysicalResponse(2, null, diskUtil.body()?.data, null))
                         physicalData.add(HomePhysicalResponse(3, null, null, diskUtilTotal.body()?.data))
-                        serverUtilData.postValue(SingleLiveEvent(physicalData))
-//                        serverNetworkUtil.postValue(SingleLiveEvent())
-//                        serverNetworkUtilTotal.postValue(SingleLiveEvent())
-//                        serverDiskUtil.postValue(SingleLiveEvent())
-//                        serverDiskUtilTotal.postValue(SingleLiveEvent())
+                        performanceData.add(HomePerformanceResponse(0, "Network I/O", netUtil.body()?.data))
+                        performanceData.add(HomePerformanceResponse(1, "Disk I/O",diskUtil.body()?.data))
+                        serverPhysicalUtilData.postValue(SingleLiveEvent(physicalData))
+                        serverPerformanceUtilData.postValue(SingleLiveEvent(performanceData))
                     }
                 }
             }
