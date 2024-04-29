@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/grey"
+    android:paddingStart="30dp"
+    android:paddingEnd="0dp"
+    android:layout_marginBottom="5dp">
+
+    <TextView
+        android:id="@+id/tv_performance_child_direction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/os_regular"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:text="Transmit: 250KiB total"
+        android:gravity="center_vertical"
+        app:drawableStartCompat="@drawable/ic_transmit"
+        android:drawablePadding="5dp"/>
+
+</LinearLayout>
