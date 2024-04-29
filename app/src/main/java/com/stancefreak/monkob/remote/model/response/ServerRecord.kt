@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
 
 @Parcelize
-data class ServerCpuUsageRecord(
+data class ServerRecord(
     @SerializedName("created_at")
     val createdAt: String = "",
     @SerializedName("id")
