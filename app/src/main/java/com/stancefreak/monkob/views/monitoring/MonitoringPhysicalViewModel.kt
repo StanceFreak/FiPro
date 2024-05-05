@@ -8,6 +8,7 @@ import com.stancefreak.monkob.remote.model.response.HomePerformanceResponse
 import com.stancefreak.monkob.remote.model.response.HomePhysicalResponse
 import com.stancefreak.monkob.remote.model.response.ServerAvgMemory
 import com.stancefreak.monkob.remote.model.response.ServerCpuUsage
+import com.stancefreak.monkob.remote.model.response.ServerDiskUsage
 import com.stancefreak.monkob.remote.repository.AppRepository
 import com.stancefreak.monkob.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ class MonitoringPhysicalViewModel @Inject constructor(
 
     private val serverAvgMemory = MutableLiveData<SingleLiveEvent<ServerAvgMemory?>>()
     private val serverCpuUsage = MutableLiveData<SingleLiveEvent<ServerCpuUsage?>>()
+    private val serverDiskUsage = MutableLiveData<SingleLiveEvent<ServerDiskUsage?>>()
     private val serverPhysicalUtilData = MutableLiveData<SingleLiveEvent<ArrayList<HomePhysicalResponse>?>>()
     private val serverPerformanceUtilData = MutableLiveData<SingleLiveEvent<ArrayList<HomePerformanceResponse>?>>()
     private val apiLoading = MutableLiveData<SingleLiveEvent<Boolean>>()
@@ -31,6 +33,7 @@ class MonitoringPhysicalViewModel @Inject constructor(
 
     fun observeServerAvgMemory(): LiveData<SingleLiveEvent<ServerAvgMemory?>> = serverAvgMemory
     fun observeServerCpuUsage(): LiveData<SingleLiveEvent<ServerCpuUsage?>> = serverCpuUsage
+    fun observeServerDiskUsage(): LiveData<SingleLiveEvent<ServerDiskUsage?>> = serverDiskUsage
     fun observePhysicalServerUtil(): LiveData<SingleLiveEvent<ArrayList<HomePhysicalResponse>?>> = serverPhysicalUtilData
     fun observePerformanceServerUtil(): LiveData<SingleLiveEvent<ArrayList<HomePerformanceResponse>?>> = serverPerformanceUtilData
     fun observeApiLoading(): LiveData<SingleLiveEvent<Boolean>> = apiLoading
@@ -43,6 +46,7 @@ class MonitoringPhysicalViewModel @Inject constructor(
             try {
                 val avgMemory = repo.getServerAvgMemory()
                 val cpuUsage = repo.getServerCpuUsage()
+                val diskUsage = repo.getServerDiskUsage()
                 val netUtil = repo.getServerNetworkUtil()
                 val netUtilTotal = repo.getServerNetworkUtilTotal()
                 val diskUtil = repo.getServerDiskUtil()
@@ -56,6 +60,11 @@ class MonitoringPhysicalViewModel @Inject constructor(
                     }
                     cpuUsage.isSuccessful.not() || cpuUsage.body() == null-> {
                         val err = cpuUsage.errorBody()?.string()?.let { JSONObject(it) }
+                        apiLoading.postValue(SingleLiveEvent(false))
+                        apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
+                    }
+                    diskUsage.isSuccessful.not() || diskUsage.body() == null-> {
+                        val err = diskUsage.errorBody()?.string()?.let { JSONObject(it) }
                         apiLoading.postValue(SingleLiveEvent(false))
                         apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
                     }
@@ -84,6 +93,7 @@ class MonitoringPhysicalViewModel @Inject constructor(
                         apiError.postValue(SingleLiveEvent(Pair(false, null)))
                         serverAvgMemory.postValue(SingleLiveEvent(avgMemory.body()?.data))
                         serverCpuUsage.postValue(SingleLiveEvent(cpuUsage.body()?.data))
+                        serverDiskUsage.postValue(SingleLiveEvent(diskUsage.body()?.data))
                         physicalData.add(HomePhysicalResponse(0, netUtil.body()?.data, null, null))
                         physicalData.add(HomePhysicalResponse(1, null, null, netUtilTotal.body()?.data))
                         physicalData.add(HomePhysicalResponse(2, null, diskUtil.body()?.data, null))

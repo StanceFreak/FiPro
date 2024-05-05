@@ -67,7 +67,26 @@ class MonitoringPhysicalFragment : Fragment() {
                                 "${round(avgMemory.toFloat() / 1000000000)}GB"
                             }
                         }
-                        tvPhysMemUtil.text = "Current memory usage: $finalAvgMemory of ${round(response.memoryTotal / 1000000000)}GiB (${response.memoryUsage}%)"
+                        tvPhysMemUtil.text = "Current memory usage: $finalAvgMemory of ${round(response.memoryTotal / 1000000000)}GB (${response.memoryUsage}%)"
+                    }
+                }
+                observeServerDiskUsage().observe(viewLifecycleOwner) {
+                    it.getContentIfNotHandled()?.let { response ->
+                        val finalDiskUsageSize = when (val currentDiskUsageSize = response.diskSizeTotal - response.usageSizeByte) {
+                            in 0 .. 1000 -> {
+                                "${currentDiskUsageSize}B"
+                            }
+                            in 1001 .. 1000000 -> {
+                                "${currentDiskUsageSize / 1000}KB"
+                            }
+                            in 1000001 .. 1000000000 -> {
+                                "${currentDiskUsageSize / 1000000}MB"
+                            }
+                            else -> {
+                                "${currentDiskUsageSize / 1000000000}GB"
+                            }
+                        }
+                        tvPhysDiskUsage.text = "Current disk usage: $finalDiskUsageSize of ${response.diskSizeTotal / 1000000000}GB (${response.usagePercentage}%)"
                     }
                 }
                 observePhysicalServerUtil().observe(viewLifecycleOwner) {
