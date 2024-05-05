@@ -6,6 +6,7 @@ import com.stancefreak.monkob.remote.model.response.ServerStatusChange
 import com.stancefreak.monkob.remote.model.response.ServerUptime
 import com.stancefreak.monkob.remote.model.request.StatusChangeRequest
 import com.stancefreak.monkob.remote.model.response.ServerCpuUsage
+import com.stancefreak.monkob.remote.model.response.ServerDiskUsage
 import com.stancefreak.monkob.remote.model.response.ServerRecord
 import com.stancefreak.monkob.remote.model.response.ServerPerformanceUtil
 import com.stancefreak.monkob.remote.model.response.ServerUtilTotal
@@ -64,5 +65,9 @@ interface ApiService {
     @GET("disk-util/total")
     suspend fun getServerDiskUtilTotal(
     ): Response<BaseResponse<ArrayList<ServerUtilTotal>>>
+
+    @GET("disk-util/usage")
+    suspend fun getServerDiskUsage(
+    ): Response<BaseResponse<ServerDiskUsage>>
 
 }

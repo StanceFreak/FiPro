@@ -4,6 +4,7 @@ import com.stancefreak.monkob.remote.model.request.StatusChangeRequest
 import com.stancefreak.monkob.remote.model.response.BaseResponse
 import com.stancefreak.monkob.remote.model.response.ServerAvgMemory
 import com.stancefreak.monkob.remote.model.response.ServerCpuUsage
+import com.stancefreak.monkob.remote.model.response.ServerDiskUsage
 import com.stancefreak.monkob.remote.model.response.ServerRecord
 import com.stancefreak.monkob.remote.model.response.ServerPerformanceUtil
 import com.stancefreak.monkob.remote.model.response.ServerUtilTotal
@@ -47,6 +48,9 @@ class AppRepository @Inject constructor(private val helperImpl: ApiHelperImpl) {
     }
     suspend fun getServerDiskUtilTotal(): Response<BaseResponse<ArrayList<ServerUtilTotal>>> {
         return helperImpl.getServerDiskUtilTotal()
+    }
+    suspend fun getServerDiskUsage(): Response<BaseResponse<ServerDiskUsage>> {
+        return helperImpl.getServerDiskUsage()
     }
 
 }
