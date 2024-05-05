@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "758666168203",
+    "project_id": "montorgeni",
+    "storage_bucket": "montorgeni.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:758666168203:android:aee55916be89b3ef40d18e",
+        "android_client_info": {
+          "package_name": "com.stancefreak.monkob"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuIddR6Scx4km8x7YGnkKN-Abrz9mbDCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
