@@ -6,6 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ChartType(
     val id: Int,
-    val type: String,
-    val lastRetrieve: ArrayList<LastRetrieve>
+    val type: String
 ) : Parcelable

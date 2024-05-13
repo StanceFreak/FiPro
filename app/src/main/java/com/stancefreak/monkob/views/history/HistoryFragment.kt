@@ -51,9 +51,9 @@ class HistoryFragment : Fragment(){
             LastRetrieve(3, "Three days ago", "3 day"),
         )
         val typeList = arrayListOf(
-            ChartType(0, "Cpu usage (%)", lrList),
-            ChartType(1, "Memory usage (%)", lrList),
-            ChartType(2, "Network latency (ms)", lrList)
+            ChartType(0, "CPU usage (%)"),
+            ChartType(1, "Memory usage (%)"),
+            ChartType(2, "Network latency (ms)")
         )
         historyAdapter = HistoryAdapter(requireContext(), historyViewModel, viewLifecycleOwner)
         spAdapter = TypeSpinnerAdapter(requireContext())
@@ -61,21 +61,21 @@ class HistoryFragment : Fragment(){
             rvHistoryChart.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = historyAdapter
+                setHasFixedSize(true)
             }
-            historyAdapter.setParentData(typeList)
             spHistoryType.adapter = spAdapter
             spAdapter.setData(lrList)
-            if (historyAdapter.itemCount > 1) {
-                spHistoryType.apply {
-                    isSelected = false
-                    setSelection(0, true)
-                    onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                            historyAdapter.setIntervalData(lrList[position].query)
-                        }
+            spHistoryType.apply {
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                        Log.d("tes select", isSelected.toString())
+                        setSelection(lrList[position].id)
+                        historyAdapter.setParentData(typeList, lrList[position].query)
+                    }
 
-                        override fun onNothingSelected(p0: AdapterView<*>?) {
-                        }
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                        setSelection(0)
+                        historyAdapter.setParentData(typeList, "today")
                     }
                 }
             }

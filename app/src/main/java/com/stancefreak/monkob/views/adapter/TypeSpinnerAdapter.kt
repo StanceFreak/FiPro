@@ -19,7 +19,7 @@ class TypeSpinnerAdapter(
     }
 
     override fun getItem(position: Int): Any {
-        return this.typeList[position].query
+        return this.typeList[position].label
 
     }
     override fun getItemId(position: Int): Long {

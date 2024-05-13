@@ -40,7 +40,7 @@ class HistoryAdapter(
     private val lifecycleOwner: LifecycleOwner,
 ): RecyclerView.Adapter<HistoryAdapter.RecyclerViewHolder>() {
 
-    private val typeList = ArrayList<ChartType>()
+    private var typeList = ArrayList<ChartType>()
     private var queryInterval = ""
     inner class RecyclerViewHolder(private val binding: ItemListHistoryBinding): RecyclerView.ViewHolder(binding.root), OnChartValueSelectedListener {
         fun bind(item: ChartType) {
@@ -48,11 +48,10 @@ class HistoryAdapter(
             val tesDataLabels = ArrayList<String>()
             binding.apply {
                 tvHistoryTypeChart.text = item.type
-                if (queryInterval.isEmpty()) {
-                    queryInterval = "today"
-                }
+                Log.d("tes item id", item.id.toString())
                 when (item.id) {
                     0 -> {
+                        Log.d("tes query per item", queryInterval)
                         viewModel.getServerCpuUtilsRecords(queryInterval)
                         viewModel.observeServerCpuUtilsRecord().observe(lifecycleOwner) {
                             it.getContentIfNotHandled()?.let { response ->
@@ -63,6 +62,7 @@ class HistoryAdapter(
                                     tesDataList.add(Entry(itemPos.toFloat(), DecimalFormat("0.#").format(i.value).toFloat()))
                                 }
                                 chartData(tesDataList, tesDataLabels)
+                                Log.d("tes data", tesDataLabels.toString())
                             }
                         }
                     }
@@ -95,12 +95,9 @@ class HistoryAdapter(
                             }
                         }
                     }
-                    else -> {
-                        Toast.makeText(context, "Invalid Id", Toast.LENGTH_LONG).show()
-                    }
                 }
                 lcHistoryLatencyChart.apply {
-                    setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.white))
+//                    setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.white))
                     description.isEnabled = false
                     setTouchEnabled(true)
                     setOnChartValueSelectedListener(this@RecyclerViewHolder)
@@ -250,17 +247,28 @@ class HistoryAdapter(
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         val data = this.typeList[position]
         holder.bind(data)
+        Log.d("tes id bind", this.typeList[position].id.toString())
     }
 
-    fun setParentData(dataList: List<ChartType>) {
+//    fun setParentData(dataList: ArrayList<ChartType>) {
+    fun setParentData(dataList: ArrayList<ChartType>, query: String) {
+        for (item in dataList) {
+            Log.d("tes id list", item.id.toString())
+        }
+//        this.typeList = dataList
+        this.queryInterval = query
         this.typeList.apply {
             clear()
             addAll(dataList)
+        }
+        for (item in typeList) {
+            Log.d("tes id type", item.id.toString())
         }
         notifyDataSetChanged()
     }
 
     fun setIntervalData(query: String) {
+        Log.d("tes init query", query)
         this.queryInterval = query
         notifyDataSetChanged()
     }
