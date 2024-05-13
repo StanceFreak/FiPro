@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
+    android:background="@color/white"
     android:padding="10dp"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,7 +26,7 @@
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/os_bold"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="@color/grey"
                 android:text="Resources"
                 android:gravity="center"/>
 
@@ -37,7 +37,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/os_regular"
                 android:textSize="14sp"
-                android:textColor="@color/white"
+                android:textColor="@color/grey"
                 android:text="Processor: 50%"
                 android:gravity="center_vertical"
                 app:drawableStartCompat="@drawable/ic_processor"
@@ -50,7 +50,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/os_regular"
                 android:textSize="14sp"
-                android:textColor="@color/white"
+                android:textColor="@color/grey"
                 android:text="Memory: 300MiB of 10GiB (3%)"
                 android:gravity="center_vertical"
                 app:drawableStartCompat="@drawable/ic_memory"
@@ -63,7 +63,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/os_regular"
                 android:textSize="14sp"
-                android:textColor="@color/white"
+                android:textColor="@color/grey"
                 android:text="Disk: 40GB of 80Gb (50%)"
                 android:gravity="center_vertical"
                 app:drawableStartCompat="@drawable/ic_hard_drive"
@@ -76,7 +76,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/os_regular"
                 android:textSize="14sp"
-                android:textColor="@color/white"
+                android:textColor="@color/grey"
                 android:text="Network: 77.9KiB/s tx, 80.0KiB/s rx"
                 android:gravity="center_vertical"
                 app:drawableStartCompat="@drawable/ic_network"
@@ -89,7 +89,7 @@
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/os_regular"
                 android:textSize="14sp"
-                android:textColor="@color/white"
+                android:textColor="@color/grey"
                 android:text="Drive: 600.0KiB/s write, 1000.1KiB/s read"
                 android:gravity="center_vertical"
                 app:drawableStartCompat="@drawable/ic_drive"
@@ -98,7 +98,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/light_grey"/>
+                android:background="@color/white_2"/>
 
         </LinearLayout>
 

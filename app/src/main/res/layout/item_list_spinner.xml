@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Last 12 Hour"
-        android:textColor="@color/white"
+        android:textColor="@color/grey"
         android:textSize="14sp"
         android:fontFamily="@font/os_semibold"
         android:layout_marginBottom="5dp"/>

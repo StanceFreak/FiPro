@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/grey"
+    android:background="@color/white"
     android:paddingStart="30dp"
     android:paddingEnd="0dp"
     android:layout_marginBottom="5dp">
@@ -16,7 +16,7 @@
         android:layout_marginBottom="5dp"
         android:fontFamily="@font/os_regular"
         android:textSize="14sp"
-        android:textColor="@color/white"
+        android:textColor="@color/grey"
         android:text="Transmit: 250KiB total"
         android:gravity="center_vertical"
         app:drawableStartCompat="@drawable/ic_transmit"
