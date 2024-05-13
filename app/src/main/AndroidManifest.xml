@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GrafanaMobile"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_logo_temp" />
         <activity
             android:name=".views.navigation.NavigationActivity"
             android:theme="@style/AppTheme.NoActionBar"
