@@ -15,21 +15,23 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.stancefreak.monkob.R
 import com.stancefreak.monkob.views.navigation.NavigationActivity
+import java.util.Date
 
 class MessagingServices: FirebaseMessagingService() {
 
-    val NOTIF_CHANNEL_ID = 101
     val NOTIF_NAME = "sfreak"
 
     override fun onMessageReceived(message: RemoteMessage) {
-        Log.d("tes data fcm", message.data.toString())
-        val msg = message.data["body"].toString()
-        message.data.isNotEmpty().let {
-            showNotification(
-                applicationContext,
-                message.data["title"].toString().trim(),
-                msg.substringAfter(" - localhost:8889: ")
-            )
+        Log.d("tes data fcm", message.notification?.channelId.toString())
+        if (message.notification != null) {
+            message.notification?.let {
+                showNotification(
+                    applicationContext,
+                    it.title!!,
+                    it.body!!,
+                    it.channelId!!.toInt()
+                )
+            }
         }
     }
 
@@ -40,7 +42,8 @@ class MessagingServices: FirebaseMessagingService() {
     private fun showNotification(
         context: Context,
         title: String,
-        message: String
+        message: String,
+        notifId: Int
     ) {
         val icon = BitmapFactory.decodeResource(
             context.resources,
@@ -80,7 +83,7 @@ class MessagingServices: FirebaseMessagingService() {
 
             notifManager.apply {
                 createNotificationChannel(notifChannel)
-                notify(NOTIF_CHANNEL_ID, notif)
+                notify(notifId, notif)
             }
         } else {
             notif = NotificationCompat.Builder(context)
@@ -96,7 +99,7 @@ class MessagingServices: FirebaseMessagingService() {
             val notificationManager = context.getSystemService(
                 Context.NOTIFICATION_SERVICE
             ) as NotificationManager
-            notificationManager.notify(NOTIF_CHANNEL_ID, notif)
+            notificationManager.notify(notifId, notif)
         }
     }
 
