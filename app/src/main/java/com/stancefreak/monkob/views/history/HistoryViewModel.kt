@@ -9,15 +9,22 @@ import com.stancefreak.monkob.remote.model.response.ServerRecord
 import com.stancefreak.monkob.remote.repository.AppRepository
 import com.stancefreak.monkob.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import javax.inject.Inject
+import kotlin.math.ceil
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val repo: AppRepository
 ): ViewModel() {
-
+    private var fetchCpuStatus = true
+    private var fetchMemStatus = true
+    private var fetchLatencyStatus = true
+    private var fetchCpuCount = 0
+    private var fetchMemCount = 0
+    private var fetchLatencyCount = 0
     private val serverCpuUtilsRecord = MutableLiveData<SingleLiveEvent<ArrayList<ServerRecord>?>>()
     private val serverMemUtilsRecord = MutableLiveData<SingleLiveEvent<ArrayList<ServerRecord>?>>()
     private val serverNetLatencyRecord = MutableLiveData<SingleLiveEvent<ArrayList<ServerRecord>?>>()
@@ -28,133 +35,143 @@ class HistoryViewModel @Inject constructor(
     fun observeServerCpuUtilsRecord(): LiveData<SingleLiveEvent<ArrayList<ServerRecord>?>> = serverCpuUtilsRecord
     fun observeServerMemUtilsRecord(): LiveData<SingleLiveEvent<ArrayList<ServerRecord>?>> = serverMemUtilsRecord
     fun observeServerNetLatencyRecord(): LiveData<SingleLiveEvent<ArrayList<ServerRecord>?>> = serverNetLatencyRecord
-    fun observeServerRecord(): LiveData<SingleLiveEvent<ArrayList<Records>?>> = serverRecord
     fun observeApiLoading(): LiveData<SingleLiveEvent<Boolean>> = apiLoading
     fun observeApiError(): LiveData<SingleLiveEvent<Pair<Boolean, String?>>> = apiError
 
-    fun getServerRecords(
-        interval: String
-    ) {
+    fun getServerCpuUtilsRecords(interval: String) {
+        val firstCallTime = ceil(System.currentTimeMillis() / 60_000.0).toLong() * 60_000
         viewModelScope.launch {
-            apiLoading.postValue(SingleLiveEvent(true))
-            apiError.postValue(SingleLiveEvent(Pair(false, null)))
-            try {
-                val cpuRecord = repo.getServerCpuUsageRecord(interval)
-                val memRecord = repo.getServerMemoryUsageRecord(interval)
-                val latencyRecord = repo.getServerNetLatencyRecord(interval)
-
-                if (cpuRecord.isSuccessful.not() || cpuRecord.body() == null) {
-                    val err = cpuRecord.errorBody()?.string()?.let { JSONObject(it) }
-                    apiLoading.postValue(SingleLiveEvent(false))
-                    apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
+            fetchCpuRecords(interval, true)
+            delay(firstCallTime - System.currentTimeMillis())
+            while (fetchCpuStatus) {
+                launch {
+                    if (fetchCpuCount > 0) {
+                        fetchCpuRecords(interval, false)
+                    }
                 }
-                if (memRecord.isSuccessful.not() || memRecord.body() == null) {
-                    val err = memRecord.errorBody()?.string()?.let { JSONObject(it) }
-                    apiLoading.postValue(SingleLiveEvent(false))
-                    apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
-                }
-                if (latencyRecord.isSuccessful.not() || latencyRecord.body() == null) {
-                    val err = latencyRecord.errorBody()?.string()?.let { JSONObject(it) }
-                    apiLoading.postValue(SingleLiveEvent(false))
-                    apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
-                }
-                else {
-                    apiLoading.postValue(SingleLiveEvent(false))
-                    apiError.postValue(SingleLiveEvent(Pair(false, null)))
-                    recordList.add(Records(cpuRecord.body()?.data))
-                    recordList.add(Records(memRecord.body()?.data))
-                    recordList.add(Records(latencyRecord.body()?.data))
-                    serverCpuUtilsRecord.postValue(SingleLiveEvent(cpuRecord.body()?.data))
-                }
-            }
-            catch (e: Exception) {
-                e.printStackTrace()
-                apiLoading.postValue(SingleLiveEvent(false))
-                apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
+                delay(60_000)
             }
         }
     }
 
-    fun getServerCpuUtilsRecords(
-        interval: String
-    ) {
+    fun getServerMemUtilsRecords(interval: String) {
+        val firstCallTime = ceil(System.currentTimeMillis() / 60_000.0).toLong() * 60_000
         viewModelScope.launch {
-            apiLoading.postValue(SingleLiveEvent(true))
-            apiError.postValue(SingleLiveEvent(Pair(false, null)))
-            try {
-                val cpuRecord = repo.getServerCpuUsageRecord(interval)
-
-                if (cpuRecord.isSuccessful.not() || cpuRecord.body() == null) {
-                    val err = cpuRecord.errorBody()?.string()?.let { JSONObject(it) }
-                    apiLoading.postValue(SingleLiveEvent(false))
-                    apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
+            fetchMemRecords(interval, true)
+            delay(firstCallTime - System.currentTimeMillis())
+            while (fetchMemStatus) {
+                launch {
+                    if (fetchMemCount > 0) {
+                        fetchMemRecords(interval, false)
+                    }
                 }
-                else {
-                    apiLoading.postValue(SingleLiveEvent(false))
-                    apiError.postValue(SingleLiveEvent(Pair(false, null)))
-                    serverCpuUtilsRecord.postValue(SingleLiveEvent(cpuRecord.body()?.data))
-                }
-            }
-            catch (e: Exception) {
-                e.printStackTrace()
-                apiLoading.postValue(SingleLiveEvent(false))
-                apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
+                delay(60_000)
             }
         }
     }
 
-    fun getServerMemUtilsRecords(
-        interval: String
-    ) {
+    fun getServerNetLatencyRecords(interval: String) {
+        val firstCallTime = ceil(System.currentTimeMillis() / 60_000.0).toLong() * 60_000
         viewModelScope.launch {
-            apiLoading.postValue(SingleLiveEvent(true))
-            apiError.postValue(SingleLiveEvent(Pair(false, null)))
-            try {
-                val memRecord = repo.getServerMemoryUsageRecord(interval)
-
-                if (memRecord.isSuccessful.not() || memRecord.body() == null) {
-                    val err = memRecord.errorBody()?.string()?.let { JSONObject(it) }
-                    apiLoading.postValue(SingleLiveEvent(false))
-                    apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
+            fetchLatencyRecords(interval, true)
+            delay(firstCallTime - System.currentTimeMillis())
+            while (fetchLatencyStatus) {
+                launch {
+                    if (fetchLatencyCount > 0) {
+                        fetchLatencyRecords(interval, false)
+                    }
                 }
-                else {
-                    apiLoading.postValue(SingleLiveEvent(false))
-                    apiError.postValue(SingleLiveEvent(Pair(false, null)))
-                    serverMemUtilsRecord.postValue(SingleLiveEvent(memRecord.body()?.data))
-                }
-            }
-            catch (e: Exception) {
-                e.printStackTrace()
-                apiLoading.postValue(SingleLiveEvent(false))
-                apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
+                delay(60_000)
             }
         }
     }
 
-    fun getServerNetLatencyRecords(
-        interval: String
+    private suspend fun fetchCpuRecords(
+        interval: String,
+        loading: Boolean
     ) {
-        viewModelScope.launch {
-            apiLoading.postValue(SingleLiveEvent(true))
-            apiError.postValue(SingleLiveEvent(Pair(false, null)))
-            try {
-                val latencyRecord = repo.getServerNetLatencyRecord(interval)
-                if (latencyRecord.isSuccessful.not() || latencyRecord.body() == null) {
-                    val err = latencyRecord.errorBody()?.string()?.let { JSONObject(it) }
-                    apiLoading.postValue(SingleLiveEvent(false))
-                    apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
-                }
-                else {
-                    apiLoading.postValue(SingleLiveEvent(false))
-                    apiError.postValue(SingleLiveEvent(Pair(false, null)))
-                    serverNetLatencyRecord.postValue(SingleLiveEvent(latencyRecord.body()?.data))
-                }
-            }
-            catch (e: Exception) {
-                e.printStackTrace()
+        fetchCpuCount++
+        apiLoading.postValue(SingleLiveEvent(loading))
+        apiError.postValue(SingleLiveEvent(Pair(false, null)))
+        try {
+            val cpuRecord = repo.getServerCpuUsageRecord(interval)
+
+            fetchCpuStatus = if (cpuRecord.isSuccessful.not() || cpuRecord.body() == null) {
+                val err = cpuRecord.errorBody()?.string()?.let { JSONObject(it) }
                 apiLoading.postValue(SingleLiveEvent(false))
-                apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
+                apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
+                false
+            } else {
+                apiLoading.postValue(SingleLiveEvent(false))
+                apiError.postValue(SingleLiveEvent(Pair(false, null)))
+                serverCpuUtilsRecord.postValue(SingleLiveEvent(cpuRecord.body()?.data))
+                true
             }
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+            apiLoading.postValue(SingleLiveEvent(false))
+            apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
+            fetchCpuStatus = false
+        }
+    }
+
+    private suspend fun fetchMemRecords(
+        interval: String,
+        loading: Boolean
+    ) {
+        fetchMemCount++
+        apiLoading.postValue(SingleLiveEvent(loading))
+        apiError.postValue(SingleLiveEvent(Pair(false, null)))
+        try {
+            val memRecord = repo.getServerMemoryUsageRecord(interval)
+
+            fetchMemStatus = if (memRecord.isSuccessful.not() || memRecord.body() == null) {
+                val err = memRecord.errorBody()?.string()?.let { JSONObject(it) }
+                apiLoading.postValue(SingleLiveEvent(false))
+                apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
+                false
+            } else {
+                apiLoading.postValue(SingleLiveEvent(false))
+                apiError.postValue(SingleLiveEvent(Pair(false, null)))
+                serverMemUtilsRecord.postValue(SingleLiveEvent(memRecord.body()?.data))
+                true
+            }
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+            apiLoading.postValue(SingleLiveEvent(false))
+            apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
+            fetchMemStatus = false
+        }
+    }
+
+    private suspend fun fetchLatencyRecords(
+        interval: String,
+        loading: Boolean
+    ) {
+        fetchLatencyCount++
+        apiLoading.postValue(SingleLiveEvent(loading))
+        apiError.postValue(SingleLiveEvent(Pair(false, null)))
+        try {
+            val latencyRecord = repo.getServerNetLatencyRecord(interval)
+            fetchLatencyStatus = if (latencyRecord.isSuccessful.not() || latencyRecord.body() == null) {
+                val err = latencyRecord.errorBody()?.string()?.let { JSONObject(it) }
+                apiLoading.postValue(SingleLiveEvent(false))
+                apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
+                false
+            } else {
+                apiLoading.postValue(SingleLiveEvent(false))
+                apiError.postValue(SingleLiveEvent(Pair(false, null)))
+                serverNetLatencyRecord.postValue(SingleLiveEvent(latencyRecord.body()?.data))
+                true
+            }
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+            apiLoading.postValue(SingleLiveEvent(false))
+            apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
+            fetchLatencyStatus = false
         }
     }
 
