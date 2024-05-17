@@ -12,22 +12,27 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.data.Entry
-import com.stancefreak.monkob.R
 import com.stancefreak.monkob.databinding.FragmentHistoryBinding
 import com.stancefreak.monkob.remote.model.response.ChartType
 import com.stancefreak.monkob.remote.model.response.LastRetrieve
 import com.stancefreak.monkob.views.adapter.HistoryAdapter
 import com.stancefreak.monkob.views.adapter.TypeSpinnerAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlin.math.ceil
 
 @AndroidEntryPoint
-class HistoryFragment : Fragment(){
+class HistoryFragment : Fragment(), HistoryAdapter.OnRetrieveData{
 
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var spAdapter: TypeSpinnerAdapter
     private lateinit var historyAdapter: HistoryAdapter
     private val historyViewModel: HistoryViewModel by viewModels()
+    private var queryInterval = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,13 +60,12 @@ class HistoryFragment : Fragment(){
             ChartType(1, "Memory usage (%)"),
             ChartType(2, "Network latency (ms)")
         )
-        historyAdapter = HistoryAdapter(requireContext(), historyViewModel, viewLifecycleOwner)
+        historyAdapter = HistoryAdapter(historyViewModel, viewLifecycleOwner, this)
         spAdapter = TypeSpinnerAdapter(requireContext())
         binding.apply {
             rvHistoryChart.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = historyAdapter
-                setHasFixedSize(true)
             }
             spHistoryType.adapter = spAdapter
             spAdapter.setData(lrList)
@@ -69,17 +73,32 @@ class HistoryFragment : Fragment(){
                 onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                         Log.d("tes select", isSelected.toString())
-                        setSelection(lrList[position].id)
                         historyAdapter.setParentData(typeList, lrList[position].query)
                     }
 
                     override fun onNothingSelected(p0: AdapterView<*>?) {
-                        setSelection(0)
-                        historyAdapter.setParentData(typeList, "today")
                     }
                 }
             }
+            CoroutineScope(Dispatchers.IO).launch {
+                val firstCallTime = ceil(System.currentTimeMillis() / 60_000.0).toLong() * 60_000
+                delay(firstCallTime - System.currentTimeMillis())
+                while (isActive) {
+                    launch {
+                        historyViewModel.apply {
+                            fetchCpuRecords(queryInterval)
+                            fetchMemRecords(queryInterval)
+                            fetchLatencyRecords(queryInterval)
+                        }
+                    }
+                    delay(60_000)
+                }
+            }
         }
+    }
+
+    override fun getQuery(query: String) {
+        queryInterval = query
     }
 
 }

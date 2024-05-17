@@ -1,15 +1,8 @@
 package com.stancefreak.monkob.views.adapter
 
-import android.content.Context
 import android.graphics.DashPathEffect
-import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
@@ -29,16 +22,18 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.stancefreak.monkob.R
 import com.stancefreak.monkob.databinding.ItemListHistoryBinding
 import com.stancefreak.monkob.remote.model.response.ChartType
-import com.stancefreak.monkob.remote.model.response.ServerRecord
 import com.stancefreak.monkob.views.history.HistoryViewModel
 import java.text.DecimalFormat
-import java.text.NumberFormat
 
 class HistoryAdapter(
-    private val context: Context,
     private val viewModel: HistoryViewModel,
     private val lifecycleOwner: LifecycleOwner,
+    private val onRetrieveData: OnRetrieveData
 ): RecyclerView.Adapter<HistoryAdapter.RecyclerViewHolder>() {
+
+    interface OnRetrieveData {
+        fun getQuery(query: String)
+    }
 
     private var typeList = ArrayList<ChartType>()
     private var queryInterval = ""
@@ -48,26 +43,24 @@ class HistoryAdapter(
             val tesDataLabels = ArrayList<String>()
             binding.apply {
                 tvHistoryTypeChart.text = item.type
-                Log.d("tes item id", item.id.toString())
+                onRetrieveData.getQuery(queryInterval)
                 when (item.id) {
                     0 -> {
-                        Log.d("tes query per item", queryInterval)
-                        viewModel.getServerCpuUtilsRecords(queryInterval)
+                        viewModel.fetchCpuRecords(queryInterval)
                         viewModel.observeServerCpuUtilsRecord().observe(lifecycleOwner) {
                             it.getContentIfNotHandled()?.let { response ->
                                 tesDataLabels.clear()
                                 tesDataList.clear()
                                 for ((itemPos, i) in response.withIndex()) {
-                                    tesDataLabels.add(i.time)
                                     tesDataList.add(Entry(itemPos.toFloat(), DecimalFormat("0.#").format(i.value).toFloat()))
+                                    tesDataLabels.add(i.time)
                                 }
                                 chartData(tesDataList, tesDataLabels)
-                                Log.d("tes data", tesDataLabels.toString())
                             }
                         }
                     }
                     1 -> {
-                        viewModel.getServerMemUtilsRecords(queryInterval)
+                        viewModel.fetchMemRecords(queryInterval)
                         viewModel.observeServerMemUtilsRecord().observe(lifecycleOwner) {
                             it.getContentIfNotHandled()?.let { response ->
                                 tesDataLabels.clear()
@@ -82,14 +75,14 @@ class HistoryAdapter(
 
                     }
                     2 -> {
-                        viewModel.getServerNetLatencyRecords(queryInterval)
+                        viewModel.fetchLatencyRecords(queryInterval)
                         viewModel.observeServerNetLatencyRecord().observe(lifecycleOwner) {
                             it.getContentIfNotHandled()?.let { response ->
                                 tesDataLabels.clear()
                                 tesDataList.clear()
                                 for ((itemPos, i) in response.withIndex()) {
-                                    tesDataLabels.add(i.time)
                                     tesDataList.add(Entry(itemPos.toFloat(), DecimalFormat("0.#").format(i.value).toFloat()))
+                                    tesDataLabels.add(i.time)
                                 }
                                 chartData(tesDataList, tesDataLabels)
                             }
@@ -97,7 +90,6 @@ class HistoryAdapter(
                     }
                 }
                 lcHistoryLatencyChart.apply {
-//                    setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.white))
                     description.isEnabled = false
                     setTouchEnabled(true)
                     setOnChartValueSelectedListener(this@RecyclerViewHolder)
@@ -247,29 +239,14 @@ class HistoryAdapter(
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         val data = this.typeList[position]
         holder.bind(data)
-        Log.d("tes id bind", this.typeList[position].id.toString())
     }
 
-//    fun setParentData(dataList: ArrayList<ChartType>) {
     fun setParentData(dataList: ArrayList<ChartType>, query: String) {
-        for (item in dataList) {
-            Log.d("tes id list", item.id.toString())
-        }
-//        this.typeList = dataList
         this.queryInterval = query
         this.typeList.apply {
             clear()
             addAll(dataList)
         }
-        for (item in typeList) {
-            Log.d("tes id type", item.id.toString())
-        }
-        notifyDataSetChanged()
-    }
-
-    fun setIntervalData(query: String) {
-        Log.d("tes init query", query)
-        this.queryInterval = query
         notifyDataSetChanged()
     }
 }

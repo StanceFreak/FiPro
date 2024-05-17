@@ -1,5 +1,6 @@
 package com.stancefreak.monkob.views.monitoring
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -63,6 +64,7 @@ class MonitoringPhysicalViewModel @Inject constructor(
         apiLoading.postValue(SingleLiveEvent(loading))
         apiError.postValue(SingleLiveEvent(Pair(false, null)))
         try {
+            val startTime = System.currentTimeMillis()
             val avgMemory = repo.getServerAvgMemory()
             val cpuUsage = repo.getServerCpuUsage()
             val diskUsage = repo.getServerDiskUsage()
@@ -131,6 +133,8 @@ class MonitoringPhysicalViewModel @Inject constructor(
                     serverPhysicalUtilData.postValue(SingleLiveEvent(physicalData))
                     serverPerformanceUtilData.postValue(SingleLiveEvent(performanceData))
                     fetchStatus = true
+                    val elapsedTime = System.currentTimeMillis() - startTime
+                    Log.d("tes retrieve data", elapsedTime.toString())
                 }
             }
         }
