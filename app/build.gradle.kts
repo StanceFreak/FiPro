@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -8,6 +10,9 @@ plugins {
 }
 
 android {
+    val localPropertiesFile = rootProject.file("local.properties")
+    val localProperties = Properties()
+    localProperties.load(localPropertiesFile.inputStream())
     namespace = "com.stancefreak.monkob"
     compileSdk = 34
 
@@ -28,11 +33,11 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://152.42.222.215:3100/server/\"")
+            buildConfigField("String", "BASE_URL", localProperties["BASE_URL"].toString())
         }
         release {
             isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"http://152.42.222.215:3100/server/\"")
+            buildConfigField("String", "BASE_URL", localProperties["BASE_URL"].toString())
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
