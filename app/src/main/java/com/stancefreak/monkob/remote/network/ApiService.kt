@@ -7,6 +7,7 @@ import com.stancefreak.monkob.remote.model.response.ServerUptime
 import com.stancefreak.monkob.remote.model.request.StatusChangeRequest
 import com.stancefreak.monkob.remote.model.response.ServerCpuUsage
 import com.stancefreak.monkob.remote.model.response.ServerDiskUsage
+import com.stancefreak.monkob.remote.model.response.ServerNotifRecord
 import com.stancefreak.monkob.remote.model.response.ServerRecord
 import com.stancefreak.monkob.remote.model.response.ServerPerformanceUtil
 import com.stancefreak.monkob.remote.model.response.ServerUtilTotal
@@ -45,6 +46,10 @@ interface ApiService {
     suspend fun getServerNetLatencyRecord(
         @Query("interval") interval: String
     ): Response<BaseResponse<ArrayList<ServerRecord>>>
+
+    @GET("notifications/record?")
+    suspend fun getServerNotifRecord(
+    ): Response<BaseResponse<ArrayList<ServerNotifRecord>>>
 
     @GET("cpu-util")
     suspend fun getServerCpuUsage(
