@@ -12,7 +12,7 @@ data class ServerAvgMemory(
     @SerializedName("memoryTotal")
     val memoryTotal: Double = 0.0,
     @SerializedName("memoryUsage")
-    val memoryUsage: Int = 0,
+    val memoryUsage: Double = 0.0,
     @SerializedName("time")
     val time: String = ""
 ) : Parcelable

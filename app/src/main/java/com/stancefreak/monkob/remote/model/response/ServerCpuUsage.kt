@@ -10,5 +10,5 @@ data class ServerCpuUsage(
     @SerializedName("time")
     val time: String = "",
     @SerializedName("value")
-    val value: String = ""
+    val value: Double = 0.0
 ) : Parcelable
