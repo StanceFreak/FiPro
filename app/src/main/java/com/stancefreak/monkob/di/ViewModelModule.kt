@@ -4,6 +4,7 @@ import com.stancefreak.monkob.remote.repository.AppRepository
 import com.stancefreak.monkob.views.history.HistoryViewModel
 import com.stancefreak.monkob.views.home.HomeViewModel
 import com.stancefreak.monkob.views.monitoring.MonitoringPhysicalViewModel
+import com.stancefreak.monkob.views.notification.NotificationViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,5 +26,9 @@ object ViewModelModule {
     @Provides
     @ViewModelScoped
     fun historyViewModel(repository: AppRepository) = HistoryViewModel(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun notificationViewModel(repository: AppRepository) = NotificationViewModel(repository)
 
 }
