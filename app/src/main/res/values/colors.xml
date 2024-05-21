@@ -8,5 +8,7 @@
     <color name="white_2">#E8E6E3</color>
     <color name="red">#EB0700</color>
     <color name="yellow">#FF7900</color>
+    <color name="yellow_light">#EED202</color>
     <color name="transparent">#00000000</color>
+    <color name="green">#00FF00</color>
 </resources>

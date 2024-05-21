@@ -32,32 +32,35 @@ class HistoryViewModel @Inject constructor(
     private val serverMemUtilsRecord = MutableLiveData<SingleLiveEvent<ArrayList<ServerRecord>?>>()
     private val serverNetLatencyRecord = MutableLiveData<SingleLiveEvent<ArrayList<ServerRecord>?>>()
     private val serverRecord = MutableLiveData<SingleLiveEvent<ArrayList<Records>?>>()
-    private val apiLoading = MutableLiveData<SingleLiveEvent<Boolean>>()
+    private val cpuLoading = MutableLiveData<SingleLiveEvent<Boolean>>()
+    private val memLoading = MutableLiveData<SingleLiveEvent<Boolean>>()
+    private val latencyLoading = MutableLiveData<SingleLiveEvent<Boolean>>()
     private val apiError = MutableLiveData<SingleLiveEvent<Pair<Boolean, String?>>>()
     private val recordList = ArrayList<Records>()
     fun observeServerCpuUtilsRecord(): LiveData<SingleLiveEvent<ArrayList<ServerRecord>?>> = serverCpuUtilsRecord
     fun observeServerMemUtilsRecord(): LiveData<SingleLiveEvent<ArrayList<ServerRecord>?>> = serverMemUtilsRecord
     fun observeServerNetLatencyRecord(): LiveData<SingleLiveEvent<ArrayList<ServerRecord>?>> = serverNetLatencyRecord
-    fun observeApiLoading(): LiveData<SingleLiveEvent<Boolean>> = apiLoading
+    fun observeCpuLoading(): LiveData<SingleLiveEvent<Boolean>> = cpuLoading
+    fun observeMemLoading(): LiveData<SingleLiveEvent<Boolean>> = memLoading
+    fun observeLatencyLoading(): LiveData<SingleLiveEvent<Boolean>> = latencyLoading
     fun observeApiError(): LiveData<SingleLiveEvent<Pair<Boolean, String?>>> = apiError
 
     fun fetchCpuRecords(
         interval: String
     ) {
         viewModelScope.launch {
-            fetchCpuCount++
-            apiLoading.postValue(SingleLiveEvent(true))
+            cpuLoading.postValue(SingleLiveEvent(true))
             apiError.postValue(SingleLiveEvent(Pair(false, null)))
             try {
                 val cpuRecord = repo.getServerCpuUsageRecord(interval)
 
                 fetchCpuStatus = if (cpuRecord.isSuccessful.not() || cpuRecord.body() == null) {
                     val err = cpuRecord.errorBody()?.string()?.let { JSONObject(it) }
-                    apiLoading.postValue(SingleLiveEvent(false))
+                    cpuLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
                     false
                 } else {
-                    apiLoading.postValue(SingleLiveEvent(false))
+                    cpuLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(false, null)))
                     serverCpuUtilsRecord.postValue(SingleLiveEvent(cpuRecord.body()?.data))
                     true
@@ -65,7 +68,7 @@ class HistoryViewModel @Inject constructor(
             }
             catch (e: Exception) {
                 e.printStackTrace()
-                apiLoading.postValue(SingleLiveEvent(false))
+                cpuLoading.postValue(SingleLiveEvent(false))
                 apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
                 fetchCpuStatus = false
             }
@@ -76,19 +79,18 @@ class HistoryViewModel @Inject constructor(
         interval: String
     ) {
         viewModelScope.launch {
-            fetchMemCount++
-            apiLoading.postValue(SingleLiveEvent(true))
+            memLoading.postValue(SingleLiveEvent(true))
             apiError.postValue(SingleLiveEvent(Pair(false, null)))
             try {
                 val memRecord = repo.getServerMemoryUsageRecord(interval)
 
                 fetchMemStatus = if (memRecord.isSuccessful.not() || memRecord.body() == null) {
                     val err = memRecord.errorBody()?.string()?.let { JSONObject(it) }
-                    apiLoading.postValue(SingleLiveEvent(false))
+                    memLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
                     false
                 } else {
-                    apiLoading.postValue(SingleLiveEvent(false))
+                    memLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(false, null)))
                     serverMemUtilsRecord.postValue(SingleLiveEvent(memRecord.body()?.data))
                     true
@@ -96,7 +98,7 @@ class HistoryViewModel @Inject constructor(
             }
             catch (e: Exception) {
                 e.printStackTrace()
-                apiLoading.postValue(SingleLiveEvent(false))
+                memLoading.postValue(SingleLiveEvent(false))
                 apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
                 fetchMemStatus = false
             }
@@ -107,18 +109,17 @@ class HistoryViewModel @Inject constructor(
         interval: String
     ) {
         viewModelScope.launch {
-            fetchLatencyCount++
-            apiLoading.postValue(SingleLiveEvent(true))
+            latencyLoading.postValue(SingleLiveEvent(true))
             apiError.postValue(SingleLiveEvent(Pair(false, null)))
             try {
                 val latencyRecord = repo.getServerNetLatencyRecord(interval)
                 fetchLatencyStatus = if (latencyRecord.isSuccessful.not() || latencyRecord.body() == null) {
                     val err = latencyRecord.errorBody()?.string()?.let { JSONObject(it) }
-                    apiLoading.postValue(SingleLiveEvent(false))
+                    latencyLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
                     false
                 } else {
-                    apiLoading.postValue(SingleLiveEvent(false))
+                    latencyLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(false, null)))
                     serverNetLatencyRecord.postValue(SingleLiveEvent(latencyRecord.body()?.data))
                     true
@@ -126,7 +127,7 @@ class HistoryViewModel @Inject constructor(
             }
             catch (e: Exception) {
                 e.printStackTrace()
-                apiLoading.postValue(SingleLiveEvent(false))
+                latencyLoading.postValue(SingleLiveEvent(false))
                 apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
                 fetchLatencyStatus = false
             }

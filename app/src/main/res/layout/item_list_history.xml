@@ -17,23 +17,64 @@
         android:fontFamily="@font/cg_bold"
         android:layout_marginBottom="10dp"/>
 
-<!--    <Spinner-->
-<!--        android:id="@+id/sp_history_type_chart"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:spinnerMode="dropdown"-->
-<!--        android:background="@drawable/bg_spinner_rounded_white"-->
-<!--        android:paddingHorizontal="10dp"-->
-<!--        android:paddingVertical="5dp"-->
-<!--        android:layout_marginBottom="10dp"-->
-<!--        android:theme="@style/ThemeOverlay.AppCompat.Light"-->
-<!--        android:popupBackground="@color/grey"-->
-<!--        app:popupTheme="@style/AppTheme.PopupOverlay"/>-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_history_chart_loading"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:background="@drawable/bg_spinner_rounded_white">
+
+        <ProgressBar
+            android:id="@+id/pb_history_chart_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:theme="@style/CustomColorProgressBar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/pb_history_chart_loading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:text="Loading the data, please wait"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            android:fontFamily="@font/cg_bold"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_history_chart_empty"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:visibility="gone"
+        android:background="@drawable/bg_spinner_rounded_white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="There is no data, try asking the administator!"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            android:fontFamily="@font/cg_bold"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lc_history_latency_chart"
         android:layout_width="match_parent"
         android:layout_height="230dp"
+        android:visibility="gone"
         android:background="@drawable/bg_spinner_rounded_white"
         android:elevation="10dp"/>
 
