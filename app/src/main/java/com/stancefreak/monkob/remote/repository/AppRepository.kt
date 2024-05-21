@@ -5,6 +5,7 @@ import com.stancefreak.monkob.remote.model.response.BaseResponse
 import com.stancefreak.monkob.remote.model.response.ServerAvgMemory
 import com.stancefreak.monkob.remote.model.response.ServerCpuUsage
 import com.stancefreak.monkob.remote.model.response.ServerDiskUsage
+import com.stancefreak.monkob.remote.model.response.ServerNotifRecord
 import com.stancefreak.monkob.remote.model.response.ServerRecord
 import com.stancefreak.monkob.remote.model.response.ServerPerformanceUtil
 import com.stancefreak.monkob.remote.model.response.ServerUtilTotal
@@ -33,6 +34,9 @@ class AppRepository @Inject constructor(private val helperImpl: ApiHelperImpl) {
     }
     suspend fun getServerNetLatencyRecord(interval: String): Response<BaseResponse<ArrayList<ServerRecord>>> {
         return helperImpl.getServerNetLatencyRecord(interval)
+    }
+    suspend fun getServerNotifRecord(): Response<BaseResponse<ArrayList<ServerNotifRecord>>> {
+        return helperImpl.getServerNotifRecord()
     }
     suspend fun getServerCpuUsage(): Response<BaseResponse<ServerCpuUsage>> {
         return helperImpl.getServerCpuUsage()
