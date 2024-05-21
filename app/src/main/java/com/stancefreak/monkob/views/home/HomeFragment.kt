@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
+import com.stancefreak.monkob.R
 import com.stancefreak.monkob.databinding.FragmentHomeBinding
 import com.stancefreak.monkob.views.adapter.HomePagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +41,9 @@ class HomeFragment : Fragment() {
             vpHomeContainer.apply {
                 adapter = pagerAdapter
                 isUserInputEnabled = false
+            }
+            ivHomeHeaderNotif.setOnClickListener {
+                findNavController().navigate(R.id.home_to_notif)
             }
 //            srHomeRefresh.setOnRefreshListener {
 //                onRetrieveData.getRefreshState(srHomeRefresh.isRefreshing)

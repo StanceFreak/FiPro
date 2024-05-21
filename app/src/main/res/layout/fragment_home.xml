@@ -41,7 +41,7 @@
                     android:fontFamily="@font/cg_bold"/>
 
                 <ImageView
-                    android:id="@+id/iv_home_header_alert"
+                    android:id="@+id/iv_home_header_notif"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
@@ -87,18 +87,31 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_centerHorizontal="true"
+               android:layout_alignParentTop="true"
                android:text="Online for 1 days, 32 minutes, 13 seconds."
                android:textSize="14sp"
                android:textColor="@color/grey"
+               android:fontFamily="@font/os_medium"/>
+
+           <TextView
+               android:id="@+id/tv_home_header_prometheus_label"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@id/tv_home_header_status"
+               android:layout_marginTop="5dp"
+               android:text="Prometheus is running :"
+               android:textColor="@color/grey"
+               android:textSize="14sp"
+               android:textStyle="bold"
                android:fontFamily="@font/os_medium"
-               android:layout_alignParentTop="true"/>
+               android:layout_centerHorizontal="true"/>
 
            <LinearLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:layout_below="@id/tv_home_header_status"
+               android:layout_below="@id/tv_home_header_prometheus_label"
                android:paddingHorizontal="10dp"
-               android:layout_marginTop="10dp"
+               android:layout_marginTop="5dp"
                android:orientation="horizontal">
 
                <com.google.android.material.button.MaterialButton
@@ -108,7 +121,7 @@
                    android:layout_weight="1"
                    android:backgroundTint="@color/red"
                    android:textAllCaps="false"
-                   android:text="Shutdown"
+                   android:text="Stop"
                    android:textSize="14sp"
                    android:fontFamily="@font/cg_bold"
                    app:cornerRadius="10dp"/>
@@ -125,7 +138,7 @@
                    android:layout_weight="1"
                    android:backgroundTint="@color/yellow"
                    android:textAllCaps="false"
-                   android:text="Soft Reboot"
+                   android:text="Restart"
                    android:textSize="14sp"
                    android:fontFamily="@font/cg_bold"
                    app:cornerRadius="10dp"/>
