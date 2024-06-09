@@ -91,4 +91,6 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     implementation("com.google.firebase:firebase-messaging:23.4.1")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation("com.karumi:dexter:6.2.3")
 }

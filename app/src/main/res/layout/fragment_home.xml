@@ -71,6 +71,36 @@
        app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintBottom_toBottomOf="parent">
 
+       <com.facebook.shimmer.ShimmerFrameLayout
+           android:id="@+id/sf_home_header_uptime_loading"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           android:paddingTop="10dp"
+           app:layout_constraintStart_toStartOf="parent">
+
+           <View
+               android:layout_width="250dp"
+               android:layout_height="15dp"
+               android:background="@color/grey_2"
+               android:layout_gravity="center_horizontal"/>
+
+       </com.facebook.shimmer.ShimmerFrameLayout>
+
+       <com.facebook.shimmer.ShimmerFrameLayout
+           android:id="@+id/sf_home_header_loading"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:layout_constraintTop_toBottomOf="@+id/sf_home_header_uptime_loading"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           android:paddingHorizontal="10dp">
+
+           <include layout="@layout/item_loading_home_header"/>
+
+       </com.facebook.shimmer.ShimmerFrameLayout>
+
        <RelativeLayout
            android:id="@+id/rl_home_header_container"
            android:layout_width="match_parent"
@@ -78,6 +108,7 @@
            app:layout_constraintTop_toTopOf="parent"
            app:layout_constraintEnd_toEndOf="parent"
            app:layout_constraintStart_toStartOf="parent"
+           android:visibility="invisible"
            android:background="@color/white"
            android:paddingTop="10dp"
            android:paddingHorizontal="10dp">
@@ -99,7 +130,7 @@
                android:layout_height="wrap_content"
                android:layout_below="@id/tv_home_header_status"
                android:layout_marginTop="5dp"
-               android:text="Prometheus is running :"
+               android:text="Prometheus is UP"
                android:textColor="@color/grey"
                android:textSize="14sp"
                android:textStyle="bold"
@@ -115,7 +146,7 @@
                android:orientation="horizontal">
 
                <com.google.android.material.button.MaterialButton
-                   android:id="@+id/btn_home_header_shutdown"
+                   android:id="@+id/btn_home_header_stop"
                    android:layout_width="0dp"
                    android:layout_height="wrap_content"
                    android:layout_weight="1"
@@ -152,6 +183,7 @@
            android:layout_width="match_parent"
            android:layout_height="0dp"
            android:background="@color/white"
+           android:visibility="gone"
            app:layout_constraintEnd_toEndOf="parent"
            app:layout_constraintStart_toStartOf="parent"
            app:layout_constraintTop_toBottomOf="@id/rl_home_header_container"
@@ -165,10 +197,74 @@
            android:id="@+id/vp_home_container"
            android:layout_width="match_parent"
            android:layout_height="0dp"
+           android:visibility="gone"
            app:layout_constraintTop_toBottomOf="@id/tl_home_container"
            app:layout_constraintBottom_toBottomOf="parent"
            app:layout_constraintStart_toStartOf="parent"
            app:layout_constraintEnd_toEndOf="parent"/>
+
+       <com.facebook.shimmer.ShimmerFrameLayout
+           android:id="@+id/sf_home_body_loading"
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@id/rl_home_header_container"
+           app:layout_constraintBottom_toBottomOf="parent">
+
+           <include layout="@layout/item_loading_home_body"/>
+
+       </com.facebook.shimmer.ShimmerFrameLayout>
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/cl_home_empty_container"
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:visibility="gone"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@id/rl_home_header_container"
+           app:layout_constraintBottom_toBottomOf="parent">
+
+           <ImageView
+               android:id="@+id/iv_home_empty"
+               android:layout_width="48dp"
+               android:layout_height="48dp"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"
+               android:src="@drawable/ic_conn_refused"/>
+
+           <TextView
+               android:id="@+id/tv_home_empty_title"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@id/iv_home_empty"
+               android:layout_marginTop="5dp"
+               android:text="Connection Refused"
+               android:textAlignment="center"
+               android:textSize="20sp"
+               android:textColor="@color/black"
+               android:fontFamily="@font/cg_bold"/>
+
+           <TextView
+               android:id="@+id/tv_home_empty_subtitle"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@id/tv_home_empty_title"
+               android:layout_marginTop="5dp"
+               android:text="Can't connect to Prometheus services\nPlease check your server/service status"
+               android:textAlignment="center"
+               android:textSize="16sp"
+               android:textColor="@color/black"
+               android:fontFamily="@font/cg_regular"/>
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
 
 <!--       <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
 <!--           android:id="@+id/sr_home_refresh"-->
