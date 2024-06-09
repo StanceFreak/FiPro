@@ -5,6 +5,7 @@ import com.stancefreak.monkob.views.history.HistoryViewModel
 import com.stancefreak.monkob.views.home.HomeViewModel
 import com.stancefreak.monkob.views.monitoring.MonitoringPhysicalViewModel
 import com.stancefreak.monkob.views.notification.NotificationViewModel
+import com.stancefreak.monkob.views.splash.SplashViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +19,10 @@ object ViewModelModule {
     @Provides
     @ViewModelScoped
     fun homeViewModel(repository: AppRepository) = HomeViewModel(repository)
+
+    @Provides
+    @ViewModelScoped
+    fun splashViewModel(repository: AppRepository) = SplashViewModel(repository)
 
     @Provides
     @ViewModelScoped
