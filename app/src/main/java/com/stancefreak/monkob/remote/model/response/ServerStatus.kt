@@ -6,9 +6,7 @@ import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
 
 @Parcelize
-data class ServerUptime(
+data class ServerStatus(
     @SerializedName("up")
-    val up: Int,
-    @SerializedName("uptime")
-    val uptime: String = ""
+    val up: String = ""
 ) : Parcelable

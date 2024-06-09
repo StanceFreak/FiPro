@@ -1,8 +1,17 @@
 package com.stancefreak.monkob.views.adapter
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.DashPathEffect
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isGone
@@ -20,11 +29,28 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
+import com.stancefreak.monkob.BuildConfig
 import com.stancefreak.monkob.R
 import com.stancefreak.monkob.databinding.ItemListHistoryBinding
 import com.stancefreak.monkob.remote.model.response.ChartType
+import com.stancefreak.monkob.remote.model.response.ServerRecord
 import com.stancefreak.monkob.views.history.HistoryViewModel
+import java.io.File
+import java.io.FileOutputStream
+import java.io.FileWriter
+import java.io.OutputStream
+import java.nio.file.Files
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
 
 class HistoryAdapter(
     private val viewModel: HistoryViewModel,
@@ -51,21 +77,38 @@ class HistoryAdapter(
                             fetchCpuRecords(queryInterval)
                             observeServerCpuUtilsRecord().observe(lifecycleOwner) {
                                 it.getContentIfNotHandled()?.let { response ->
-                                    tesDataLabels.clear()
-                                    tesDataList.clear()
-                                    for ((itemPos, i) in response.withIndex()) {
-                                        tesDataList.add(Entry(itemPos.toFloat(), DecimalFormat("0.#").format(i.value).toFloat()))
-                                        tesDataLabels.add(i.time)
+                                    if (response.isNotEmpty()) {
+                                        sfHistoryChartLoading.stopShimmer()
+                                        sfHistoryChartLoading.isGone = true
+                                        clHistoryChartLoading.isGone = true
+                                        clHistoryChartEmpty.isGone = true
+                                        llHistoryBody.isGone = false
+                                        tesDataLabels.clear()
+                                        tesDataList.clear()
+                                        for ((itemPos, i) in response.withIndex()) {
+                                            tesDataList.add(Entry(itemPos.toFloat(), DecimalFormat("0.#").format(i.value).toFloat()))
+                                            tesDataLabels.add(i.time)
+                                        }
+                                        val sdfParse = SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss").parse("${response[0].date}T${response[0].time}")?.time
+                                        val sdfFormatted = SimpleDateFormat("EEEE, dd MMM yyyy").format(sdfParse)
+                                        chartData(tesDataList, tesDataLabels, sdfFormatted)
                                     }
-                                    chartData(tesDataList, tesDataLabels)
+                                    else {
+                                        sfHistoryChartLoading.stopShimmer()
+                                        sfHistoryChartLoading.isGone = true
+                                        clHistoryChartLoading.isGone = true
+                                        clHistoryChartEmpty.isGone = false
+                                        llHistoryBody.isGone = true
+                                    }
                                 }
                             }
                             observeCpuLoading().observe(lifecycleOwner) {
                                 it.getContentIfNotHandled()?.let { loading ->
                                     if (loading) {
+                                        sfHistoryChartLoading.isGone = false
                                         clHistoryChartLoading.isGone = false
                                         clHistoryChartEmpty.isGone = true
-                                        lcHistoryLatencyChart.isGone = true
+                                        llHistoryBody.isGone = true
                                     }
                                 }
                             }
@@ -76,21 +119,41 @@ class HistoryAdapter(
                             fetchMemRecords(queryInterval)
                             observeServerMemUtilsRecord().observe(lifecycleOwner) {
                                 it.getContentIfNotHandled()?.let { response ->
+                                    val startTime = System.currentTimeMillis()
                                     tesDataLabels.clear()
                                     tesDataList.clear()
-                                    for ((itemPos, i) in response.withIndex()) {
-                                        tesDataList.add(Entry(itemPos.toFloat(), DecimalFormat("0.#").format(i.value).toFloat()))
-                                        tesDataLabels.add(i.time)
+                                    if (response.isNotEmpty()) {
+                                        sfHistoryChartLoading.stopShimmer()
+                                        sfHistoryChartLoading.isGone = true
+                                        clHistoryChartLoading.isGone = true
+                                        clHistoryChartEmpty.isGone = true
+                                        llHistoryBody.isGone = false
+                                        for ((itemPos, i) in response.withIndex()) {
+                                            tesDataList.add(Entry(itemPos.toFloat(), DecimalFormat("0.#").format(i.value).toFloat()))
+                                            tesDataLabels.add(i.time)
+                                        }
+                                        val sdfParse = SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss").parse("${response[0].date}T${response[0].time}")?.time
+                                        val sdfFormatted = SimpleDateFormat("EEEE, dd MMM yyyy").format(sdfParse)
+                                        chartData(tesDataList, tesDataLabels, sdfFormatted)
                                     }
-                                    chartData(tesDataList, tesDataLabels)
+                                    else {
+                                        sfHistoryChartLoading.stopShimmer()
+                                        sfHistoryChartLoading.isGone = true
+                                        clHistoryChartLoading.isGone = true
+                                        clHistoryChartEmpty.isGone = false
+                                        llHistoryBody.isGone = true
+                                    }
+                                    val elapsedTime = System.currentTimeMillis() - startTime
+                                    Log.d("memory historical logging: ", elapsedTime.toString())
                                 }
                             }
                             observeMemLoading().observe(lifecycleOwner) {
                                 it.getContentIfNotHandled()?.let { loading ->
                                     if (loading) {
+                                        sfHistoryChartLoading.isGone = false
                                         clHistoryChartLoading.isGone = false
                                         clHistoryChartEmpty.isGone = true
-                                        lcHistoryLatencyChart.isGone = true
+                                        llHistoryBody.isGone = true
                                     }
                                 }
                             }
@@ -102,21 +165,86 @@ class HistoryAdapter(
                             fetchLatencyRecords(queryInterval)
                             observeServerNetLatencyRecord().observe(lifecycleOwner) {
                                 it.getContentIfNotHandled()?.let { response ->
-                                    tesDataLabels.clear()
-                                    tesDataList.clear()
-                                    for ((itemPos, i) in response.withIndex()) {
-                                        tesDataList.add(Entry(itemPos.toFloat(), DecimalFormat("0.#").format(i.value).toFloat()))
-                                        tesDataLabels.add(i.time)
+                                    val startTime = System.currentTimeMillis()
+                                    if (response.isNotEmpty()) {
+                                        sfHistoryChartLoading.stopShimmer()
+                                        sfHistoryChartLoading.isGone = true
+                                        clHistoryChartLoading.isGone = true
+                                        clHistoryChartEmpty.isGone = true
+                                        llHistoryBody.isGone = false
+                                        tesDataLabels.clear()
+                                        tesDataList.clear()
+                                        for ((itemPos, i) in response.withIndex()) {
+                                            tesDataList.add(Entry(itemPos.toFloat(), DecimalFormat("0.#").format(i.value).toFloat()))
+                                            tesDataLabels.add(i.time)
+                                        }
+                                        val sdfParse = SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss").parse("${response[0].date}T${response[0].time}")?.time
+                                        val sdfFormatted = SimpleDateFormat("EEEE, dd MMM yyyy").format(sdfParse)
+                                        chartData(tesDataList, tesDataLabels, sdfFormatted)
+                                        ivHistoryDownload.setOnClickListener {
+                                            Dexter.withContext(itemView.context)
+                                                .withPermission(
+                                                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                                )
+                                                .withListener(object : PermissionListener {
+                                                    @RequiresApi(Build.VERSION_CODES.O)
+                                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                                        val formatter = SimpleDateFormat("dd-MM-yyyy HH.mm")
+                                                        val currentTimeStamp = formatter.format(Date())
+                                                        Toast.makeText(itemView.context, "Downloading file...", Toast.LENGTH_LONG).show()
+                                                    }
+
+                                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                                        val alertBuilder = AlertDialog.Builder(itemView.context)
+                                                        alertBuilder.apply {
+                                                            setTitle("Need permission!")
+                                                            setMessage("This app need permission to use this feature, you can manually manage the permission from the app settings!")
+                                                            setPositiveButton("Settings") { dialog, _ ->
+                                                                dialog.cancel()
+                                                                val goSetting =
+                                                                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                                                val uri =
+                                                                    Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                                                                goSetting.data = uri
+                                                                itemView.context.startActivity(goSetting)
+                                                            }
+                                                            setNegativeButton("Cancel") { dialog, _ ->
+                                                                dialog.cancel()
+                                                            }
+                                                            show()
+                                                        }
+                                                    }
+
+                                                    override fun onPermissionRationaleShouldBeShown(
+                                                        permission: PermissionRequest?,
+                                                        token: PermissionToken?
+                                                    ) {
+                                                        token?.continuePermissionRequest()
+                                                    }
+
+                                                }).withErrorListener {err ->
+                                                    Log.e("permissionError", err.name)
+                                                }.check()
+                                        }
                                     }
-                                    chartData(tesDataList, tesDataLabels)
+                                    else {
+                                        sfHistoryChartLoading.stopShimmer()
+                                        sfHistoryChartLoading.isGone = true
+                                        clHistoryChartLoading.isGone = true
+                                        clHistoryChartEmpty.isGone = false
+                                        llHistoryBody.isGone = true
+                                    }
+                                    val elapsedTime = System.currentTimeMillis() - startTime
+                                    Log.d("latency historical logging: ", elapsedTime.toString())
                                 }
                             }
                             observeLatencyLoading().observe(lifecycleOwner) {
                                 it.getContentIfNotHandled()?.let { loading ->
                                     if (loading) {
+                                        sfHistoryChartLoading.isGone = false
                                         clHistoryChartLoading.isGone = false
                                         clHistoryChartEmpty.isGone = true
-                                        lcHistoryLatencyChart.isGone = true
+                                        llHistoryBody.isGone = true
                                     }
                                 }
                             }
@@ -149,12 +277,14 @@ class HistoryAdapter(
             }
         }
 
-        private fun chartData(dataList: ArrayList<Entry>, labelList: ArrayList<String>) {
+        private fun chartData(dataList: ArrayList<Entry>, labelList: ArrayList<String>, date: String) {
             binding.apply {
                 if (dataList.isEmpty() || labelList.isEmpty()) {
+                    sfHistoryChartLoading.stopShimmer()
+                    sfHistoryChartLoading.isGone = true
                     clHistoryChartLoading.isGone = true
                     clHistoryChartEmpty.isGone = false
-                    lcHistoryLatencyChart.isGone = true
+                    llHistoryBody.isGone = true
                 }
                 else {
                     val l = lcHistoryLatencyChart.legend
@@ -231,7 +361,7 @@ class HistoryAdapter(
                         yAxis.addLimitLine(limitLine2)
                         yAxis.addLimitLine(limitLine3)
                         xAxis.valueFormatter = IndexAxisValueFormatter(labelList)
-                        val tesData = LineDataSet(dataList, "data 1")
+                        val tesData = LineDataSet(dataList, date)
                         tesData.apply {
                             setDrawIcons(false)
                             enableDashedLine(10f,5f, 0f)

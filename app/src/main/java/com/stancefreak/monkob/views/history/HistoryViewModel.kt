@@ -52,25 +52,25 @@ class HistoryViewModel @Inject constructor(
             cpuLoading.postValue(SingleLiveEvent(true))
             apiError.postValue(SingleLiveEvent(Pair(false, null)))
             try {
+                val startTime = System.currentTimeMillis()
                 val cpuRecord = repo.getServerCpuUsageRecord(interval)
 
-                fetchCpuStatus = if (cpuRecord.isSuccessful.not() || cpuRecord.body() == null) {
+                if (cpuRecord.isSuccessful.not() || cpuRecord.body() == null) {
                     val err = cpuRecord.errorBody()?.string()?.let { JSONObject(it) }
                     cpuLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
-                    false
                 } else {
                     cpuLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(false, null)))
                     serverCpuUtilsRecord.postValue(SingleLiveEvent(cpuRecord.body()?.data))
-                    true
+                    val elapsedTime = System.currentTimeMillis() - startTime
+                    Log.d("retrieve CPU record data", elapsedTime.toString())
                 }
             }
             catch (e: Exception) {
                 e.printStackTrace()
                 cpuLoading.postValue(SingleLiveEvent(false))
                 apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
-                fetchCpuStatus = false
             }
         }
     }
@@ -82,25 +82,25 @@ class HistoryViewModel @Inject constructor(
             memLoading.postValue(SingleLiveEvent(true))
             apiError.postValue(SingleLiveEvent(Pair(false, null)))
             try {
+                val startTime = System.currentTimeMillis()
                 val memRecord = repo.getServerMemoryUsageRecord(interval)
 
-                fetchMemStatus = if (memRecord.isSuccessful.not() || memRecord.body() == null) {
+                if (memRecord.isSuccessful.not() || memRecord.body() == null) {
                     val err = memRecord.errorBody()?.string()?.let { JSONObject(it) }
                     memLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
-                    false
                 } else {
                     memLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(false, null)))
                     serverMemUtilsRecord.postValue(SingleLiveEvent(memRecord.body()?.data))
-                    true
+                    val elapsedTime = System.currentTimeMillis() - startTime
+                    Log.d("retrieve memory record data", elapsedTime.toString())
                 }
             }
             catch (e: Exception) {
                 e.printStackTrace()
                 memLoading.postValue(SingleLiveEvent(false))
                 apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
-                fetchMemStatus = false
             }
         }
     }
@@ -112,24 +112,24 @@ class HistoryViewModel @Inject constructor(
             latencyLoading.postValue(SingleLiveEvent(true))
             apiError.postValue(SingleLiveEvent(Pair(false, null)))
             try {
+                val startTime = System.currentTimeMillis()
                 val latencyRecord = repo.getServerNetLatencyRecord(interval)
-                fetchLatencyStatus = if (latencyRecord.isSuccessful.not() || latencyRecord.body() == null) {
+                if (latencyRecord.isSuccessful.not() || latencyRecord.body() == null) {
                     val err = latencyRecord.errorBody()?.string()?.let { JSONObject(it) }
                     latencyLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(true, err?.getString("message"))))
-                    false
                 } else {
                     latencyLoading.postValue(SingleLiveEvent(false))
                     apiError.postValue(SingleLiveEvent(Pair(false, null)))
                     serverNetLatencyRecord.postValue(SingleLiveEvent(latencyRecord.body()?.data))
-                    true
+                    val elapsedTime = System.currentTimeMillis() - startTime
+                    Log.d("retrieve latency record data", elapsedTime.toString())
                 }
             }
             catch (e: Exception) {
                 e.printStackTrace()
                 latencyLoading.postValue(SingleLiveEvent(false))
                 apiError.postValue(SingleLiveEvent(Pair(true, e.message.toString())))
-                fetchLatencyStatus = false
             }
         }
     }
