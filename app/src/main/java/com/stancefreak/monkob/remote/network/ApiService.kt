@@ -1,15 +1,18 @@
 package com.stancefreak.monkob.remote.network
 
+import com.stancefreak.monkob.remote.model.request.RegisterDeviceRequest
 import com.stancefreak.monkob.remote.model.response.BaseResponse
 import com.stancefreak.monkob.remote.model.response.ServerAvgMemory
 import com.stancefreak.monkob.remote.model.response.ServerStatusChange
 import com.stancefreak.monkob.remote.model.response.ServerUptime
 import com.stancefreak.monkob.remote.model.request.StatusChangeRequest
+import com.stancefreak.monkob.remote.model.response.RegisterDevice
 import com.stancefreak.monkob.remote.model.response.ServerCpuUsage
 import com.stancefreak.monkob.remote.model.response.ServerDiskUsage
 import com.stancefreak.monkob.remote.model.response.ServerNotifRecord
 import com.stancefreak.monkob.remote.model.response.ServerRecord
 import com.stancefreak.monkob.remote.model.response.ServerPerformanceUtil
+import com.stancefreak.monkob.remote.model.response.ServerStatus
 import com.stancefreak.monkob.remote.model.response.ServerUtilTotal
 import retrofit2.Response
 import retrofit2.http.Body
@@ -20,13 +23,22 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("status")
-    suspend fun getServerUptime(
-    ): Response<BaseResponse<ServerUptime>>
+    suspend fun getServerStatus(
+    ): Response<BaseResponse<ServerStatus>>
 
     @POST("change-status")
     suspend fun postServerStatus(
         @Body statusChangeRequest: StatusChangeRequest
     ): Response<BaseResponse<ServerStatusChange>>
+
+    @POST("notification/device/register")
+    suspend fun postRegisterDevice(
+        @Body registerDeviceRequest: RegisterDeviceRequest
+    ): Response<RegisterDevice>
+
+    @GET("uptime")
+    suspend fun getServerUptime(
+    ): Response<BaseResponse<ServerUptime>>
 
     @GET("average-memory")
     suspend fun getServerAvgMemory(

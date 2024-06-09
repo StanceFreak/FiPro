@@ -1,15 +1,18 @@
 package com.stancefreak.monkob.remote.network
 
+import com.stancefreak.monkob.remote.model.request.RegisterDeviceRequest
 import com.stancefreak.monkob.remote.model.response.BaseResponse
 import com.stancefreak.monkob.remote.model.response.ServerAvgMemory
 import com.stancefreak.monkob.remote.model.response.ServerStatusChange
 import com.stancefreak.monkob.remote.model.response.ServerUptime
 import com.stancefreak.monkob.remote.model.request.StatusChangeRequest
+import com.stancefreak.monkob.remote.model.response.RegisterDevice
 import com.stancefreak.monkob.remote.model.response.ServerCpuUsage
 import com.stancefreak.monkob.remote.model.response.ServerDiskUsage
 import com.stancefreak.monkob.remote.model.response.ServerNotifRecord
 import com.stancefreak.monkob.remote.model.response.ServerRecord
 import com.stancefreak.monkob.remote.model.response.ServerPerformanceUtil
+import com.stancefreak.monkob.remote.model.response.ServerStatus
 import com.stancefreak.monkob.remote.model.response.ServerUtilTotal
 import retrofit2.Response
 
@@ -20,8 +23,16 @@ class ApiHelperImpl(
         return service.getServerUptime()
     }
 
+    override suspend fun getServerStatus(): Response<BaseResponse<ServerStatus>> {
+        return service.getServerStatus()
+    }
+
     override suspend fun postServerStatus(statusChangeRequest: StatusChangeRequest): Response<BaseResponse<ServerStatusChange>> {
         return service.postServerStatus(statusChangeRequest)
+    }
+
+    override suspend fun postRegisterDevice(registerDeviceRequest: RegisterDeviceRequest): Response<RegisterDevice> {
+        return service.postRegisterDevice(registerDeviceRequest)
     }
 
     override suspend fun getServerAvgMemory(): Response<BaseResponse<ServerAvgMemory>> {

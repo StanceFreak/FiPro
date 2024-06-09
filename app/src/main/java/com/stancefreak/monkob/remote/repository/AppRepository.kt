@@ -1,13 +1,16 @@
 package com.stancefreak.monkob.remote.repository
 
+import com.stancefreak.monkob.remote.model.request.RegisterDeviceRequest
 import com.stancefreak.monkob.remote.model.request.StatusChangeRequest
 import com.stancefreak.monkob.remote.model.response.BaseResponse
+import com.stancefreak.monkob.remote.model.response.RegisterDevice
 import com.stancefreak.monkob.remote.model.response.ServerAvgMemory
 import com.stancefreak.monkob.remote.model.response.ServerCpuUsage
 import com.stancefreak.monkob.remote.model.response.ServerDiskUsage
 import com.stancefreak.monkob.remote.model.response.ServerNotifRecord
 import com.stancefreak.monkob.remote.model.response.ServerRecord
 import com.stancefreak.monkob.remote.model.response.ServerPerformanceUtil
+import com.stancefreak.monkob.remote.model.response.ServerStatus
 import com.stancefreak.monkob.remote.model.response.ServerUtilTotal
 import com.stancefreak.monkob.remote.model.response.ServerStatusChange
 import com.stancefreak.monkob.remote.model.response.ServerUptime
@@ -16,12 +19,17 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class AppRepository @Inject constructor(private val helperImpl: ApiHelperImpl) {
-
+    suspend fun getServerStatus(): Response<BaseResponse<ServerStatus>> {
+        return helperImpl.getServerStatus()
+    }
     suspend fun getServerUptime(): Response<BaseResponse<ServerUptime>> {
         return helperImpl.getServerUptime()
     }
     suspend fun postServerStatus(statusChangeRequest: StatusChangeRequest): Response<BaseResponse<ServerStatusChange>> {
         return helperImpl.postServerStatus(statusChangeRequest)
+    }
+    suspend fun postRegisterDevice(registerDeviceRequest: RegisterDeviceRequest): Response<RegisterDevice> {
+        return helperImpl.postRegisterDevice(registerDeviceRequest)
     }
     suspend fun getServerAvgMemory(): Response<BaseResponse<ServerAvgMemory>> {
         return helperImpl.getServerAvgMemory()
