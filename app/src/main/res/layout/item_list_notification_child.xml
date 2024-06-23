@@ -9,13 +9,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp">
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:id="@+id/tv_notif_subgroup_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="[Critical] Server high CPU usage"
+            android:text="Judul notifikasi"
             android:textSize="14sp"
             android:textColor="@color/black"
             android:fontFamily="@font/os_semibold"/>
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_notif_subgroup_title"
             android:layout_marginTop="3dp"
-            android:text="CPU usage is at 70%"
+            android:text="Pesan notifikasi"
             android:textSize="12sp"
             android:textColor="@color/black"
             android:fontFamily="@font/os_regular"/>
@@ -46,7 +46,7 @@
     <View
         android:id="@+id/view_home_header_line"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="3dp"
         android:background="@color/white_2"/>
 
 </LinearLayout>

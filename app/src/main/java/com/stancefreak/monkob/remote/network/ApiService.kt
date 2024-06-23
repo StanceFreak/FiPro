@@ -12,6 +12,7 @@ import com.stancefreak.monkob.remote.model.response.ServerDiskUsage
 import com.stancefreak.monkob.remote.model.response.ServerNotifRecord
 import com.stancefreak.monkob.remote.model.response.ServerRecord
 import com.stancefreak.monkob.remote.model.response.ServerPerformanceUtil
+import com.stancefreak.monkob.remote.model.response.ServerRecordsDownload
 import com.stancefreak.monkob.remote.model.response.ServerStatus
 import com.stancefreak.monkob.remote.model.response.ServerUtilTotal
 import retrofit2.Response
@@ -86,5 +87,20 @@ interface ApiService {
     @GET("disk-util/usage")
     suspend fun getServerDiskUsage(
     ): Response<BaseResponse<ServerDiskUsage>>
+
+    @GET("cpu-util/download/record?")
+    suspend fun downloadCpuRecords(
+        @Query("interval") interval: String
+    ): Response<ServerRecordsDownload>
+
+    @GET("mem-util/download/record?")
+    suspend fun downloadMemoryRecords(
+        @Query("interval") interval: String
+    ): Response<ServerRecordsDownload>
+
+    @GET("net-latency/download/record?")
+    suspend fun downloadLatencyRecords(
+        @Query("interval") interval: String
+    ): Response<ServerRecordsDownload>
 
 }

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stancefreak.monkob.databinding.FragmentMonitoringPhysicalBinding
@@ -92,9 +93,9 @@ class MonitoringPhysicalFragment : Fragment() {
                 observePhysicalServerUtil().observe(viewLifecycleOwner) {
                     it.getContentIfNotHandled()?.let { response ->
                         for (item in response) {
-                            val receiveValue = item.utilTotalData?.get(0)?.value?.toFloat()
-                            val transmitValue = item.utilTotalData?.get(1)?.value?.toFloat()
-                            if (receiveValue != null && transmitValue != null) {
+                            if (item.utilTotalData != null) {
+                                val receiveValue = item.utilTotalData[0].value.toFloat()
+                                val transmitValue = item.utilTotalData[1].value.toFloat()
                                 val finalReceiveValue = when (receiveValue) {
                                     in 0.0 .. 1000.0 -> {
                                         "${round(receiveValue)}B/s"
@@ -136,6 +137,19 @@ class MonitoringPhysicalFragment : Fragment() {
                 observePerformanceServerUtil().observe(viewLifecycleOwner) {
                     it.getContentIfNotHandled()?.let { response ->
                         monitoringPerformanceParentAdapter.setData(response)
+                    }
+                }
+                observeApiLoading().observe(viewLifecycleOwner) {
+                    it.getContentIfNotHandled()?.let { loading ->
+                        if (loading) {
+                            sfPhysicalBodyLoading.isGone = false
+                            llPhysicalBodyContainer.isGone = true
+                        }
+                        else {
+                            sfPhysicalBodyLoading.stopShimmer()
+                            sfPhysicalBodyLoading.isGone = true
+                            llPhysicalBodyContainer.isGone = false
+                        }
                     }
                 }
             }

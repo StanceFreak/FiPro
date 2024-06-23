@@ -20,9 +20,10 @@ import java.util.Date
 class MessagingServices: FirebaseMessagingService() {
 
     val NOTIF_NAME = "sfreak"
+    val NOTIF_GROUP = "com.stancefreak.monkob.FCM_GROUP"
 
     override fun onMessageReceived(message: RemoteMessage) {
-        Log.d("tes data fcm", message.notification?.channelId.toString())
+        val startTime = System.currentTimeMillis()
         if (message.notification != null) {
             message.notification?.let {
                 showNotification(
@@ -31,6 +32,8 @@ class MessagingServices: FirebaseMessagingService() {
                     it.body!!,
                     it.channelId!!.toInt()
                 )
+                val elapsedTime = System.currentTimeMillis() - startTime
+                Log.d("notif logging: ", elapsedTime.toString())
             }
         }
     }
@@ -47,7 +50,7 @@ class MessagingServices: FirebaseMessagingService() {
     ) {
         val icon = BitmapFactory.decodeResource(
             context.resources,
-            R.drawable.ic_logo_temp
+            R.drawable.ic_logo
         )
         val i = Intent(context, NavigationActivity::class.java)
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -62,11 +65,12 @@ class MessagingServices: FirebaseMessagingService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notif = NotificationCompat.Builder(context, NOTIF_NAME)
                 .setLargeIcon(icon)
-                .setSmallIcon(R.drawable.ic_logo_temp)
+                .setSmallIcon(R.drawable.ic_logo)
                 .setAutoCancel(true)
                 .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
                 .setContentIntent(pi)
                 .setSound(uri)
+                .setGroup(NOTIF_GROUP)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .setWhen(System.currentTimeMillis())
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
@@ -88,11 +92,12 @@ class MessagingServices: FirebaseMessagingService() {
         } else {
             notif = NotificationCompat.Builder(context)
                 .setLargeIcon(icon)
-                .setSmallIcon(R.drawable.ic_logo_temp)
+                .setSmallIcon(R.drawable.ic_logo)
                 .setAutoCancel(true)
                 .setContentIntent(pi)
                 .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
                 .setSound(uri)
+                .setGroup(NOTIF_GROUP)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentTitle(title).setContentText(message).build()
