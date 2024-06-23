@@ -134,7 +134,7 @@ class MonitoringPhysicalViewModel @Inject constructor(
                     serverPerformanceUtilData.postValue(SingleLiveEvent(performanceData))
                     fetchStatus = true
                     val elapsedTime = System.currentTimeMillis() - startTime
-                    Log.d("tes retrieve data", elapsedTime.toString())
+                    Log.d("tes retrieve condition data", elapsedTime.toString())
                 }
             }
         }

@@ -9,6 +9,7 @@ import com.stancefreak.monkob.remote.repository.AppRepository
 import com.stancefreak.monkob.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,22 +23,6 @@ class NotificationViewModel @Inject constructor(
     fun observeServerNotif(): LiveData<SingleLiveEvent<ArrayList<NotificationParentResponse>?>> = serverNotif
     fun observeApiLoading(): LiveData<SingleLiveEvent<Boolean>> = apiLoading
     fun observeApiError(): LiveData<SingleLiveEvent<Pair<Boolean, String?>>> = apiError
-
-//    fun getServerUptime() {
-//        val firstCallTime = ceil(System.currentTimeMillis() / 60_000.0).toLong() * 60_000
-//        viewModelScope.launch {
-//            fetchData(true)
-//            delay(firstCallTime - System.currentTimeMillis())
-//            while (fetchStatus) {
-//                launch {
-//                    if (fetchCount > 0) {
-//                        fetchData(false)
-//                    }
-//                }
-//                delay(60_000)
-//            }
-//        }
-//    }
 
     fun fetchNotifRecords() {
         viewModelScope.launch {

@@ -1,6 +1,7 @@
 package com.stancefreak.monkob.views.adapter
 
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stancefreak.monkob.databinding.ItemListNotificationChildBinding
 import com.stancefreak.monkob.remote.model.response.ServerNotifRecord
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -18,10 +20,11 @@ class NotificationChildAdapter: RecyclerView.Adapter<NotificationChildAdapter.Re
 
         fun bind(item: ServerNotifRecord) {
             binding.apply {
-                val formatDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                val retrieveTime = formatDate.parse(item.createdAt)
-                val currentTime = Date()
-                val timeDiff = currentTime.time - retrieveTime?.time!!
+                val parseDate = SimpleDateFormat("dd/MM/yyyy'T'HH:mm:ss").parse("${item.date}T${item.time}")
+                val formatDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                val retrieveTime = formatDate.format(parseDate)
+                val currentTime = formatDate.format(Date())
+                val timeDiff = formatDate.parse(currentTime)!!.time - formatDate.parse(retrieveTime)!!.time
 
                 val second = TimeUnit.MILLISECONDS.toSeconds(timeDiff)
                 val minute = TimeUnit.MILLISECONDS.toMinutes(timeDiff)
