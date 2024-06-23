@@ -1,11 +1,17 @@
 package com.stancefreak.monkob.views.adapter
 
+import android.Manifest
 import android.app.AlertDialog
 import android.app.DownloadManager
 import android.content.Context.DOWNLOAD_SERVICE
+import android.content.Intent
 import android.graphics.DashPathEffect
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
+import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -27,6 +33,13 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
+import com.stancefreak.monkob.BuildConfig
 import com.stancefreak.monkob.R
 import com.stancefreak.monkob.databinding.ItemListHistoryBinding
 import com.stancefreak.monkob.remote.model.response.ChartType
@@ -225,22 +238,49 @@ class HistoryAdapter(
         ) {
             success.observe(lifecycleOwner) {
                 it.getContentIfNotHandled()?.let { response ->
-                    val downloadManager = itemView.context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
-                    val uri = Uri.parse(response.data)
-                    val request = DownloadManager.Request(uri)
-                    request.apply {
-                        setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                        setDestinationInExternalPublicDir(
-                            Environment.DIRECTORY_DOWNLOADS,
-                            uri.lastPathSegment
-                        )
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                        Dexter.withContext(itemView.context)
+                            .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            .withListener(object : PermissionListener {
+                                override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                    downloadData(response.data)
+                                }
+
+                                override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                    val alertBuilder = AlertDialog.Builder(itemView.context)
+                                    alertBuilder.apply {
+                                        setTitle("Need Permission!")
+                                        setMessage("To use this feature, you need to allow the required permission in App settings!")
+                                        setPositiveButton("Settings") { dialog, _ ->
+                                            dialog.cancel()
+                                            val goSetting =
+                                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                            val uri =
+                                                Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                                            goSetting.data = uri
+                                            itemView.context.startActivity(goSetting)
+                                        }
+                                        setNegativeButton("Cancel") { dialog, _ ->
+                                            dialog.cancel()
+                                        }
+                                        show()
+                                    }
+                                }
+
+                                override fun onPermissionRationaleShouldBeShown(
+                                    permission: PermissionRequest?,
+                                    token: PermissionToken?
+                                ) {
+                                    token?.continuePermissionRequest()
+                                }
+
+                            }).withErrorListener { error ->
+                                Log.e("permissionError", error.name)
+                            }.check()
                     }
-                    downloadManager.enqueue(request)
-                    Toast.makeText(
-                        itemView.context,
-                        "File downloaded at ${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    else {
+                        downloadData(response.data)
+                    }
                 }
             }
             error.observe(lifecycleOwner) {
@@ -250,6 +290,25 @@ class HistoryAdapter(
                     }
                 }
             }
+        }
+
+        private fun downloadData(url: String) {
+            val downloadManager = itemView.context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+            val uri = Uri.parse(url)
+            val request = DownloadManager.Request(uri)
+            request.apply {
+                setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    uri.lastPathSegment
+                )
+            }
+            downloadManager.enqueue(request)
+            Toast.makeText(
+                itemView.context,
+                "File downloaded at ${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}",
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         private fun chartData(dataList: ArrayList<Entry>, labelList: ArrayList<String>, date: String) {
