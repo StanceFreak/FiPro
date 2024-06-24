@@ -70,7 +70,8 @@ class SplashFragment : Fragment() {
             observeDeviceRegisterError().observe(viewLifecycleOwner) {
                 it.getContentIfNotHandled()?.let { error ->
                     if (error.first) {
-                        if (error.second == "timeout") {
+                        Log.d("Tes error", error.second.toString())
+                        if (error.second == "timeout" || error.second!!.contains("failed to connect")) {
                             val networkErrorDialog =
                                 ItemDialogErrorBinding.inflate(LayoutInflater.from(context))
                             val networkErrorDialogBuilder = android.app.AlertDialog.Builder(context)
