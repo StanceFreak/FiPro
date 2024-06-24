@@ -31,19 +31,43 @@ class MonitoringPerformanceChildGaugeAdapter: RecyclerView.Adapter<MonitoringPer
                         itemUnits = "KB/s"
                         finalSpeed = round(item.value.toFloat() / 1000)
                     }
-                    else -> {
+                    in 1000000.1 .. 1000000000.0 -> {
                         itemUnits = "MB/s"
                         finalSpeed = round(item.value.toFloat() / 1000000)
                     }
+                    else -> {
+                        itemUnits = "GB/s"
+                        finalSpeed = round(item.value.toFloat() / 1000000000)
+                    }
+                }
+                tvPerformanceChildSpeedValue.text = "${finalSpeed}${itemUnits}"
+                svPerformanceChildSpeed.apply {
+                    speedTo(finalSpeed/1000000)
                 }
                 if (childId == 0) {
+                    svPerformanceChildSpeed.apply {
+                        makeSections(11, Color.CYAN, Style.BUTT)
+                        sections[0].color = Color.GREEN
+                        sections[1].color = Color.GREEN
+                        sections[2].color = Color.GREEN
+                        sections[3].color = Color.GREEN
+                        sections[4].color = Color.GREEN
+                        sections[5].color = Color.GREEN
+                        sections[6].color = Color.YELLOW
+                        sections[7].color = Color.YELLOW
+                        sections[8].color = Color.YELLOW
+                        sections[9].color = Color.RED
+                        sections[10].color = Color.RED
+                    }
                     val finalPackets = when (item.packets.toFloat()) {
                         in 0.0 .. 1000.0 -> {
                             "${round(item.packets.toFloat())}B"
                         } in 1000.1 .. 1000000.0 -> {
                             "${round(item.packets.toFloat() / 1000)}KB"
-                        } else -> {
+                        } in 1000000.1 .. 1000000000.0 -> {
                             "${round(item.packets.toFloat() / 1000000)}MB"
+                        }else -> {
+                            "${round(item.packets.toFloat() / 1000000000)}GB"
                         }
                     }
                     when (item.direction) {
@@ -59,22 +83,23 @@ class MonitoringPerformanceChildGaugeAdapter: RecyclerView.Adapter<MonitoringPer
                 }
                 else {
                     svPerformanceChildSpeed.apply {
-                        makeSections(5, Color.CYAN, Style.BUTT)
+                        makeSections(11, Color.CYAN, Style.BUTT)
                         sections[0].color = Color.RED
                         sections[1].color = Color.YELLOW
-                        sections[2].color = Color.YELLOW
+                        sections[2].color = Color.GREEN
                         sections[3].color = Color.GREEN
                         sections[4].color = Color.GREEN
+                        sections[5].color = Color.GREEN
+                        sections[6].color = Color.GREEN
+                        sections[7].color = Color.GREEN
+                        sections[8].color = Color.YELLOW
+                        sections[9].color = Color.YELLOW
+                        sections[10].color = Color.RED
                     }
                     tvPerformanceChildDirection.apply {
                         setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_hard_drive, 0, 0, 0)
                         text = "${item.direction}:"
                     }
-                }
-                Log.d("tes gauge speed", finalSpeed.toString())
-                svPerformanceChildSpeed.apply {
-                    speedTo(finalSpeed)
-                    unit = itemUnits
                 }
             }
         }
