@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="10dp"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".views.monitoring.MonitoringPhysicalFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/sf_physical_body_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/item_loading_physical_body"/>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_physical_body_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/os_bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/grey"
+                    android:text="Resources"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/tv_phys_proc_util"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/os_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/grey"
+                    android:text="Processor: 50%"
+                    android:gravity="center_vertical"
+                    app:drawableStartCompat="@drawable/ic_processor"
+                    android:drawablePadding="5dp"/>
+
+                <TextView
+                    android:id="@+id/tv_phys_mem_util"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/os_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/grey"
+                    android:text="Memory: 300MiB of 10GiB (3%)"
+                    android:gravity="center_vertical"
+                    app:drawableStartCompat="@drawable/ic_memory"
+                    android:drawablePadding="5dp"/>
+
+                <TextView
+                    android:id="@+id/tv_phys_disk_usage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/os_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/grey"
+                    android:text="Disk: 40GB of 80Gb (50%)"
+                    android:gravity="center_vertical"
+                    app:drawableStartCompat="@drawable/ic_hard_drive"
+                    android:drawablePadding="5dp"/>
+
+                <TextView
+                    android:id="@+id/tv_phys_net_util"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/os_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/grey"
+                    android:text="Network: 77.9KiB/s tx, 80.0KiB/s rx"
+                    android:gravity="center_vertical"
+                    app:drawableStartCompat="@drawable/ic_network"
+                    android:drawablePadding="5dp"/>
+
+                <TextView
+                    android:id="@+id/tv_phys_drive_util"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/os_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/grey"
+                    android:text="Drive: 600.0KiB/s write, 1000.1KiB/s read"
+                    android:gravity="center_vertical"
+                    app:drawableStartCompat="@drawable/ic_drive"
+                    android:drawablePadding="5dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/white_2"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_performance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_list_performance_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="2"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

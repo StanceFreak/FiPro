@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:id="@+id/tv_performance_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/os_bold"
+            android:textSize="16sp"
+            android:textColor="@color/grey"
+            android:text="Network Interfaces"
+            android:gravity="center"/>
+
+        <RadioGroup
+            android:id="@+id/rg_performance_rv_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_switch_gauge_or_text"
+            android:checkedButton="@+id/rb_performance_text_mode"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_performance_text_mode"
+                android:fontFamily="@font/os_regular"
+                android:background="@drawable/toggle_switch_bg_color"
+                android:checked="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="1dp"
+                android:layout_marginVertical="1dp"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Text"
+                android:textSize="12sp"
+                android:textColor="@drawable/toggle_switch_text_color" />
+
+            <RadioButton
+                android:id="@+id/rb_performance_gauge_mode"
+                android:fontFamily="@font/os_regular"
+                android:layout_marginEnd="1dp"
+                android:layout_marginVertical="1dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/toggle_switch_bg_color"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Gauge"
+                android:textSize="12sp"
+                android:textColor="@drawable/toggle_switch_text_color" />
+        </RadioGroup>
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_performance_item_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_list_performance_child" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/white_2"/>
+
+</LinearLayout>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:paddingStart="30dp"
+    android:paddingEnd="0dp"
+    android:layout_marginBottom="10dp">
+
+    <TextView
+        android:id="@+id/tv_performance_child_direction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/os_regular"
+        android:textSize="14sp"
+        android:textColor="@color/grey"
+        android:text="Transmit: 250KiB total"
+        android:gravity="center_vertical"
+        app:drawableStartCompat="@drawable/ic_transmit"
+        android:drawablePadding="5dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_performance_child_speed_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center"
+            android:text="99999.9KB"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/os_regular"/>
+
+        <com.github.anastr.speedviewlib.SpeedView
+            android:id="@+id/sv_performance_child_speed"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:sv_speedTextSize="0sp"
+            app:sv_unit=""
+            app:sv_tickNumber="11"
+            app:sv_indicator="QuarterLineIndicator"
+            app:sv_unitTextColor="@color/grey"
+            app:sv_speedTextColor="@color/grey"
+            app:sv_centerCircleColor="@color/transparent"
+            app:sv_speedometerMode="TOP"
+            app:sv_textColor="@color/grey"
+            app:sv_markColor="@color/transparent"
+            app:sv_withTremble="false"
+            app:sv_minSpeed="0.0"
+            app:sv_maxSpeed="500.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

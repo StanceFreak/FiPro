@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="Error Occured"
+        android:fontFamily="@font/os_semibold"
+        android:textSize="16sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:text="Failed to communicate with the server"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/os_regular"/>
+
+    <FrameLayout
+        android:id="@+id/btn_dialog_error"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_rounded_black"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_dialog_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Retry"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:fontFamily="@font/os_bold"/>
+
+    </FrameLayout>
+
+</LinearLayout>

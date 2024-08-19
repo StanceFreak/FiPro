@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_performance_child_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/os_regular"
+        android:textSize="14sp"
+        android:textColor="@color/grey"
+        android:text="lo: 77.9KiB/s (250KiB total)"
+        android:gravity="center_vertical"
+        app:drawableStartCompat="@drawable/ic_net_interface"
+        android:drawablePadding="5dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_performance_child_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_list_performance_child_text"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_performance_child_gauge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:listitem="@layout/item_list_performance_child_gauge"/>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="30dp"-->
+<!--        android:orientation="vertical">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_performance_child_upload"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:fontFamily="@font/os_regular"-->
+<!--            android:textSize="14sp"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:text="Transmit: 250KiB total"-->
+<!--            android:gravity="center_vertical"-->
+<!--            app:drawableStartCompat="@drawable/ic_transmit"-->
+<!--            android:drawablePadding="5dp"/>-->
+
+<!--        <com.github.anastr.speedviewlib.SpeedView-->
+<!--            android:id="@+id/sv_performance_child_upload"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            app:sv_unit="KiB/s"-->
+<!--            app:sv_tickNumber="5"-->
+<!--            app:sv_indicator="QuarterLineIndicator"-->
+<!--            app:sv_unitTextColor="@color/white"-->
+<!--            app:sv_speedTextColor="@color/white"-->
+<!--            app:sv_centerCircleColor="@color/transparent"-->
+<!--            app:sv_speedometerMode="TOP"-->
+<!--            app:sv_textColor="@color/white"-->
+<!--            app:sv_markColor="@color/transparent"-->
+<!--            app:sv_withTremble="false"-->
+<!--            app:sv_minSpeed="0.0"-->
+<!--            app:sv_maxSpeed="1000.0"-->
+<!--            android:layout_marginBottom="10dp"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_performance_child_download"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:fontFamily="@font/os_regular"-->
+<!--            android:textSize="14sp"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:text="Transmit: 250KiB total"-->
+<!--            android:gravity="center_vertical"-->
+<!--            app:drawableStartCompat="@drawable/ic_receive"-->
+<!--            android:drawablePadding="5dp"/>-->
+
+<!--        <com.github.anastr.speedviewlib.SpeedView-->
+<!--            android:id="@+id/sv_performance_child_download"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            app:sv_unit="KiB/s"-->
+<!--            app:sv_unitTextColor="@color/white"-->
+<!--            app:sv_speedTextColor="@color/white"-->
+<!--            app:sv_speedometerMode="TOP"-->
+<!--            app:sv_indicator="QuarterLineIndicator"-->
+<!--            app:sv_textColor="@color/white"-->
+<!--            app:sv_tickNumber="5"-->
+<!--            app:sv_withTremble="false"-->
+<!--            app:sv_markColor="@color/transparent"-->
+<!--            app:sv_centerCircleColor="@color/transparent"-->
+<!--            app:sv_minSpeed="0.0"-->
+<!--            app:sv_maxSpeed="1000.0"-->
+<!--            android:layout_marginBottom="10dp"/>-->
+
+<!--    </LinearLayout>-->
+
+</LinearLayout>
